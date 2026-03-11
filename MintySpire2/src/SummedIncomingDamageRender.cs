@@ -23,6 +23,34 @@ public static class SummedIncomingDamageRender
     private static readonly FieldInfo CreatureField = AccessTools.Field(typeof(NHealthBar), "_creature");
     private static readonly WeakNodeRegistry<NHealthBar> ValidBars = new();
 
+    private static Node GetLabelHost(NHealthBar bar)
+    {
+        var preferredHost = bar.HpBarContainer?.GetParent();
+        return IncomingDamageDisplayPolicy.ResolveLabelHost(preferredHost, bar);
+    }
+
+    private static IEnumerable<Node> GetLabelHosts(NHealthBar bar)
+    {
+        var preferredHost = bar.HpBarContainer?.GetParent();
+        if (preferredHost != null)
+            yield return preferredHost;
+
+        if (!ReferenceEquals(preferredHost, bar))
+            yield return bar;
+    }
+
+    private static Label? GetLabel(NHealthBar bar)
+    {
+        foreach (var host in GetLabelHosts(bar))
+        {
+            var label = host.GetNodeOrNull<Label>(RightTextNodeName);
+            if (label != null)
+                return label;
+        }
+
+        return null;
+    }
+
     /// <summary>
     ///     After a creature is assigned, create label node if it doesn't exist.
     /// </summary>
@@ -71,11 +99,13 @@ public static class SummedIncomingDamageRender
     /// <returns>bool: Was label created</returns>
     private static bool CreateLabelIfNotExist(NHealthBar bar)
     {
-        if (bar.HasNode(RightTextNodeName))
+        if (GetLabel(bar) != null)
             return false;
 
         // Parent to the same node that holds the bar so coordinates are consistent.
         var container = bar.HpBarContainer;
+        if (container == null)
+            return false;
 
         var label = new Label
         {
@@ -94,8 +124,7 @@ public static class SummedIncomingDamageRender
         label.AddThemeFontSizeOverride("font_size", 14);
 
         // Add to the same parent as the bar container so it's position relative to it.
-        var parent = container.GetParent() as Control ?? bar;
-        parent.AddChild(label);
+        GetLabelHost(bar).AddChild(label);
         RepositionLabel(bar, container.Size);
         return true;
     }
@@ -105,10 +134,12 @@ public static class SummedIncomingDamageRender
     /// </summary>
     private static void RepositionLabel(NHealthBar bar, Vector2 newSize)
     {
-        var label = bar.GetNode(RightTextNodeName) as Label;
+        var label = GetLabel(bar);
         if (label == null) return;
 
         var container = bar.HpBarContainer;
+        if (container == null)
+            return;
 
         // Positioning for the label.
         var labelWidth = 20f;
@@ -127,25 +158,28 @@ public static class SummedIncomingDamageRender
     /// </summary>
     private static void RefreshVisibilityAndText(NHealthBar bar)
     {
-        var label = bar.GetNode(RightTextNodeName) as Label;
+        var label = GetLabel(bar);
         if (label == null)
             return;
 
-        if (!bar.Visible || CombatManager.Instance.IsEnemyTurnStarted)
-        {
-            label.Visible = false;
-            return;
-        }
-
-        // Only show for the player-owned health bar.
         var creature = CreatureField?.GetValue(bar) as Creature;
-        if (creature?.Player == null)
+        var combatManager = CombatManager.Instance;
+        var shouldHideLabel = IncomingDamageDisplayPolicy.ShouldHideLabel(
+            barVisible: bar.Visible,
+            hasCombatManager: combatManager != null,
+            isEnemyTurnStarted: combatManager?.IsEnemyTurnStarted ?? false,
+            isPlayerOwnedBar: creature?.Player != null,
+            hasCombatState: creature?.CombatState != null,
+            hasHittableEnemies: creature?.CombatState?.HittableEnemies != null
+        );
+
+        if (shouldHideLabel)
         {
             label.Visible = false;
             return;
         }
 
-        var incomingDamage = CalculateIncomingDamage(creature);
+        var incomingDamage = CalculateIncomingDamage(creature!);
         if (incomingDamage > 0)
         {
             label.Text = $"←{incomingDamage}";
@@ -164,17 +198,28 @@ public static class SummedIncomingDamageRender
     {
         // Collect incoming damage from all hittable monsters (can untargetable monsters attack?).
         var incomingDamage = 0;
-        foreach (var hittableEnemy in creature.CombatState.HittableEnemies)
+        var hittableEnemies = creature.CombatState?.HittableEnemies;
+        if (hittableEnemies == null)
+            return incomingDamage;
+
+        foreach (var hittableEnemy in hittableEnemies)
         {
-            foreach (var intent in hittableEnemy.Monster.NextMove.Intents)
+            if (hittableEnemy == null)
+                continue;
+
+            var intents = hittableEnemy.Monster?.NextMove?.Intents;
+            if (intents == null)
+                continue;
+
+            foreach (var intent in intents)
             {
-                if (intent.IntentType is IntentType.Attack or IntentType.DeathBlow)
-                    incomingDamage += ((AttackIntent)intent).GetTotalDamage(null, hittableEnemy); // Is null alright here?
+                if (intent is AttackIntent attackIntent && intent.IntentType is IntentType.Attack or IntentType.DeathBlow)
+                    incomingDamage += attackIntent.GetTotalDamage([creature], hittableEnemy);
             }
         }
 
         // Knowledge demon end of turn damage
-        incomingDamage += creature.Player.Creature.GetPower<DisintegrationPower>()?.Amount ?? 0;
+        incomingDamage += creature.Player?.Creature.GetPower<DisintegrationPower>()?.Amount ?? 0;
 
         return incomingDamage;
     }
