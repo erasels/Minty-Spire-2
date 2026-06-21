@@ -9,6 +9,9 @@ public class Config: SimpleModConfig
     public static double ShuffleSpeed { get; set; } = 0.5;
     
     public static bool ShowIncomingDamage { get; set; } = true;
+    [ConfigSlider(8, 30)]
+    public static int IncomingDamageSize { get; set; } = 14;
+    
     
     [ConfigSection("misc")]
     public static bool EnableJokes { get; set; } = true;

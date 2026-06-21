@@ -3,6 +3,7 @@
   "MINTYSPIRE2-COMBAT.title": "战斗",
   "MINTYSPIRE2-SHUFFLE_SPEED.title": "弃牌后抽牌的洗牌速度",
   "MINTYSPIRE2-SHOW_INCOMING_DAMAGE.title": "在生命值栏旁显示即将受到的伤害",
+  "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "即将受到的伤害文本大小",
   "MINTYSPIRE2-MISC.title": "杂项",
   "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "在卡牌奖励后显示偷来的卡牌（盗贼跳虫）",
   "MINTYSPIRE2-ENABLE_JOKES.title": "显示玩笑改动，例如佩尔之眼跟随光标"

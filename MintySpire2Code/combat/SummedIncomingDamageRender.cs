@@ -98,7 +98,7 @@ public static class SummedIncomingDamageRender
         label.HorizontalAlignment = HorizontalAlignment.Left;
         label.VerticalAlignment = VerticalAlignment.Center;
         label.AddThemeColorOverride("font_color", Colors.Salmon);
-        label.AddThemeFontSizeOverride("font_size", 14);
+        label.AddThemeFontSizeOverride("font_size", Config.IncomingDamageSize);
 
         // Add to the same parent as the bar container so it's position relative to it.
         var parent = container.GetParent() as Control ?? bar;
@@ -118,13 +118,18 @@ public static class SummedIncomingDamageRender
         var container = bar.HpBarContainer;
 
         // Positioning for the label.
+        var fontSize = Config.IncomingDamageSize;
+        var font = label.GetThemeFont("font");
+
+        // Use the font's real line height instead of the HP bar height.
         var labelWidth = 20f;
-        var labelHeight = newSize.Y;
+        var labelHeight = font?.GetHeight(fontSize) ?? fontSize;
 
         label.Size = new Vector2(labelWidth, labelHeight);
+
         label.Position = new Vector2(
             container.Position.X + newSize.X + RightPadding,
-            container.Position.Y - labelHeight / 4
+            container.Position.Y + (newSize.Y - labelHeight) / 2f
         );
     }
 
