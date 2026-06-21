@@ -19,31 +19,8 @@ public class MintyHooker : CustomSingletonModel
     public MintyHooker() : base(HookType.Combat)
     { }
     
-    // End turn relics
-    public override Task AfterBlockGained(Creature creature, decimal amount, ValueProp props, CardModel? cardSource)
-    {
-        if (LocalContext.IsMe(creature))
-            EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
-        return Task.CompletedTask;
-    }
-
-    public override Task AfterCardDrawn(PlayerChoiceContext choiceContext, CardModel card, bool fromHandDraw)
-    {
-        EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
-        return Task.CompletedTask;
-    }
-
-    public override Task AfterCardPlayedLate(PlayerChoiceContext choiceContext, CardPlay cardPlay)
-    {
-        EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
-        return Task.CompletedTask;
-    }
-
-    public override Task AfterEnergySpent(CardModel card, int amount)
-    {
-        EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
-        return Task.CompletedTask;
-    }
+    
+    
 
     public override Task AfterSideTurnStart(CombatSide side, IReadOnlyList<Creature> participants, ICombatState combatState)
     {
