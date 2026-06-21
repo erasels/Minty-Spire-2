@@ -25,7 +25,7 @@ public class PaelsLookingEyePatch()
                 return eye;
             }
             else {
-                MainFile.Logger.Info("Oh my god its broken again");
+                MintyInit.Logger.Info("Oh my god its broken again");
             }
 
             return null;

@@ -4,10 +4,10 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
 using MintySpire2.MintySpire2Code;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 [ModInitializer(nameof(Initialize))]
-public partial class MainFile : Node
+public partial class MintyInit : Node
 {
     public const string ModId = "MintySpire2"; //At the moment, this is used only for the Logger and harmony names.
 
