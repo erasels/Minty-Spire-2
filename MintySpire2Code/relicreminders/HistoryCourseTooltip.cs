@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 
-namespace MintySpire2.relicreminders;
+namespace MintySpire2.MintySpire2Code.relicreminders;
 
 /**
  * Credits to kiooeht.

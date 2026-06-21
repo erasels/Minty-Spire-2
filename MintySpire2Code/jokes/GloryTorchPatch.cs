@@ -2,7 +2,7 @@
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 
-namespace MintySpire2.jokes;
+namespace MintySpire2.MintySpire2Code.jokes;
 
 /**
  * Credits to cany0udance, this allows Torches to be clicked to toggle their state.

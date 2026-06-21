@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using Godot;
+﻿using Godot;
 
-namespace MintySpire2.util;
+namespace MintySpire2.MintySpire2Code.util;
 
 /// <summary>
 ///     Small helper for tracking Godot nodes through weak references.

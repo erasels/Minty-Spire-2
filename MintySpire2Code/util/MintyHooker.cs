@@ -9,10 +9,10 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
-using MintySpire2.relicreminders;
-using MintySpire2.relicreminders.endturnbutton;
+using MintySpire2.MintySpire2Code.relicreminders;
+using MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
-namespace MintySpire2.util;
+namespace MintySpire2.MintySpire2Code.util;
 
 public class MintyHooker : CustomSingletonModel
 {

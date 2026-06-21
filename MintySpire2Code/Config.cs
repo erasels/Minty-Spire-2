@@ -1,6 +1,6 @@
 ﻿using BaseLib.Config;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 public class Config: SimpleModConfig
 {

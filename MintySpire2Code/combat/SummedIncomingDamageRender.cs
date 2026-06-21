@@ -13,9 +13,9 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
-using MintySpire2.util;
+using MintySpire2.MintySpire2Code.util;
 
-namespace MintySpire2.combat;
+namespace MintySpire2.MintySpire2Code.combat;
 
 /// <summary>
 ///     Adds a small text label to the Right of the health bar when the health bar is visible

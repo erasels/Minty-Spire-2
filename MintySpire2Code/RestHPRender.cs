@@ -6,9 +6,9 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Nodes.RestSite;
-using MintySpire2.util;
+using MintySpire2.MintySpire2Code.util;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 /// <summary>
 ///     Adds an extra label above the button visuals, and for HealRestSiteOption shows:

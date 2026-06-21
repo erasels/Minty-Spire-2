@@ -2,7 +2,7 @@ using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 
-namespace MintySpire2.relicreminders.endturnbutton;
+namespace MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
 public partial class EndTurnRelicReminderContainer : HBoxContainer
 {

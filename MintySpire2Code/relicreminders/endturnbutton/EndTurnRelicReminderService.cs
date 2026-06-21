@@ -7,7 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
 
-namespace MintySpire2.relicreminders.endturnbutton;
+namespace MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
 /// <summary>
 /// Event-driven reminder service: computes relevant end-turn relic reminders only when notified by EndTurnRelicReminderTriggers.

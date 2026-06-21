@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 
-namespace MintySpire2.util;
+namespace MintySpire2.MintySpire2Code.util;
 
 public static class CardTurnEndInspector
 {

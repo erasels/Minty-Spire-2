@@ -1,9 +1,8 @@
-﻿using System;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
 
-namespace MintySpire2.util;
+namespace MintySpire2.MintySpire2Code.util;
 
 public static class AsyncStateMachineFinder
 {

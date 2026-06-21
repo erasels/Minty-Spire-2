@@ -1,6 +1,5 @@
 ﻿using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.CompilerServices;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.addons.mega_text;
@@ -14,9 +13,9 @@ using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
 using MegaCrit.Sts2.Core.ValueProps;
-using MintySpire2.util;
+using MintySpire2.MintySpire2Code.util;
 
-namespace MintySpire2.combat;
+namespace MintySpire2.MintySpire2Code.combat;
 
 /**
  * Credits to kiooeht, this displays a second amount for powers that require tracking multiple values.

@@ -6,7 +6,7 @@ using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 /**
  * Credits to Ind-E, displays a small remaining gold (after hypothetical purchase) label below your current gold when hovering an item in the shop.

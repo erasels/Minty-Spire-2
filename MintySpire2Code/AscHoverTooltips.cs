@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Godot;
+﻿using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -7,7 +6,7 @@ using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.sts2.Core.Nodes.TopBar;
 using MegaCrit.Sts2.Core.Runs;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 /**
  * Credits to kiooeht, this displays tooltips for each active ascension when hovering the player icon in the topbar.

@@ -2,7 +2,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Rewards;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 /**
  * By Mangochicken.
  * Moves Bowler Hat before the gold reward after combat,

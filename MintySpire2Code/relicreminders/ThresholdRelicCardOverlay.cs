@@ -5,14 +5,13 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
-using MegaCrit.Sts2.Core.Nodes.Cards;
 using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Rooms;
 using MegaCrit.Sts2.Core.Runs;
-using MintySpire2.util;
+using MintySpire2.MintySpire2Code.util;
 
-namespace MintySpire2.relicreminders;
+namespace MintySpire2.MintySpire2Code.relicreminders;
 
 /// <summary>
 ///     Credits to Book and erasels.

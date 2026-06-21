@@ -2,7 +2,7 @@ using BaseLib.Config;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
-using MintySpire2.util;
+using MintySpire2.MintySpire2Code;
 
 namespace MintySpire2;
 

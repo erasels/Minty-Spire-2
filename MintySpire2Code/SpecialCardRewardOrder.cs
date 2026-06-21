@@ -1,7 +1,7 @@
 ﻿using HarmonyLib;
 using MegaCrit.Sts2.Core.Rewards;
 
-namespace MintySpire2;
+namespace MintySpire2.MintySpire2Code;
 
 /**
  * Credits to kiooeht.
