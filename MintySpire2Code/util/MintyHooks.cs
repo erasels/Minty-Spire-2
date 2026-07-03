@@ -120,8 +120,8 @@ public class MintyHooks
         }
     }
 
-    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterTurnEnd))]
-    public static class AfterTurnEndHook
+    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterSideTurnEnd))]
+    public static class AfterSideTurnEndHook
     {
         [HarmonyPostfix]
         public static void Postfix(CombatSide side, ref Task __result)

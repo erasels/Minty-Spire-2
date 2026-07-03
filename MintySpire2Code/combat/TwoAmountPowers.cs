@@ -20,7 +20,7 @@ namespace MintySpire2.MintySpire2Code.combat;
 /**
  * Credits to kiooeht, this displays a second amount for powers that require tracking multiple values.
  */
-[HarmonyPatch(typeof(NPower))]
+/*[HarmonyPatch(typeof(NPower))]
 static class TwoAmountPowers
 {
     private static readonly Dictionary<Type, Func<PowerModel, Amount2Data>> DisplaySecondAmount = new() {
@@ -40,7 +40,7 @@ static class TwoAmountPowers
         { typeof(VulnerablePower), power => {
             // Displays Vulnerable's % increase if it's not 50%
             var player = LocalContext.GetMe(RunManager.Instance.State);
-            var mult = power.ModifyDamageMultiplicative(power.Owner, 1M, ValueProp.Move, player?.Creature, null);
+            var mult = power.ModifyDamageMultiplicative(power.Owner, 1M, ValueProp.Move, player?.Creature, null, null);
             if (mult != power.DynamicVars[VulnerablePower._damageIncrease].BaseValue) {
                 mult = (mult - 1M) * 100M;
                 return mult.ToString("0.##") + "%";
@@ -52,7 +52,7 @@ static class TwoAmountPowers
         { typeof(WeakPower), power => {
             // Displays Weak's % decrease if it's not 25%
             var player = LocalContext.GetMe(RunManager.Instance.State);
-            var mult = power.ModifyDamageMultiplicative(player?.Creature, 1M, ValueProp.Move, power.Owner, null);
+            var mult = power.ModifyDamageMultiplicative(player?.Creature, 1M, ValueProp.Move, power.Owner, null, null);
             if (mult != power.DynamicVars[WeakPower._damageDecrease].BaseValue) {
                 mult = (1M - mult) * 100M;
                 return mult.ToString("0.##") + "%";
@@ -135,7 +135,7 @@ static class TwoAmountPowers
 
         var amount2Label = __instance.GetNode<MegaLabel>("Amount2Label");
         // If ITwoAmountPower exists, let BaseLib handle amount2Label visibility
-        var baselib = ModManager.GetLoadedMods().First(mod => mod.manifest?.id == BaseLib.BaseLibMain.ModId).assembly;
+        Assembly baselib = null; // ModManager.GetLoadedMods().First(mod => mod.manifest?.id == BaseLib.BaseLibMain.ModId).assembly; // TODO: Removed this no idea how to fix
         if (baselib?.GetType("BaseLib.Abstracts.ITwoAmountPower") == null) {
             amount2Label.Visible = false;
         }
@@ -260,3 +260,4 @@ static class TwoAmountPowers
         return true;
     }
 }
+*/

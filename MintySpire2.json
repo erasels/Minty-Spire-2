@@ -3,8 +3,8 @@
   "name": "Minty Spire 2",
   "author": "erasels",
   "description": "QoL compilation of small tweaks for the sake of UX.",
-  "version": "v1.1.0",
-  "min_game_version": "0.107.0",
+  "version": "v1.1.1",
+  "min_game_version": "0.108.0",
   "has_pck": true,
   "has_dll": true,
   "dependencies": [

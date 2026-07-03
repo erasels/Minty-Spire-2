@@ -217,6 +217,8 @@ public static class SummedIncomingDamageRender
         var creature = player.Creature;
         if (creature.CombatState == null)
             return damageVar.IntValue;
+        
+        MintyInit.Logger.Info("Ugh");
 
         var damage = Hook.ModifyDamage(
             player.RunState,
@@ -226,10 +228,12 @@ public static class SummedIncomingDamageRender
             damageVar.BaseValue,
             damageVar.Props,
             card,
+            null,
             ModifyDamageHookType.All,
             CardPreviewMode.None,
             out _);
 
+        MintyInit.Logger.Info("Passed");
         return Math.Max(0, (int)damage);
     }
     
