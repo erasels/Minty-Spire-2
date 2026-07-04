@@ -7,7 +7,6 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Combat.History.Entries;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Hooks;
-using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Nodes.Combat;
@@ -20,7 +19,7 @@ namespace MintySpire2.MintySpire2Code.combat;
 /**
  * Credits to kiooeht, this displays a second amount for powers that require tracking multiple values.
  */
-/*[HarmonyPatch(typeof(NPower))]
+[HarmonyPatch(typeof(NPower))]
 static class TwoAmountPowers
 {
     private static readonly Dictionary<Type, Func<PowerModel, Amount2Data>> DisplaySecondAmount = new() {
@@ -32,7 +31,7 @@ static class TwoAmountPowers
         { typeof(PaleBlueDotPower), power => {
             // Displays X/5 as amount2 where X is cards played this turn
             var cardCount = CombatManager.Instance.History.CardPlaysFinished.Count(c =>
-                c.RoundNumber == power.CombatState.RoundNumber &&
+                c.HappenedThisTurn(power.Owner.CombatState) &&
                 c.CardPlay.Card.Owner == power.Owner.Player);
             var threshold = power.DynamicVars[PaleBlueDotPower.cardPlayThresholdKey].IntValue;
             return $"{cardCount}/{threshold}";
@@ -135,8 +134,8 @@ static class TwoAmountPowers
 
         var amount2Label = __instance.GetNode<MegaLabel>("Amount2Label");
         // If ITwoAmountPower exists, let BaseLib handle amount2Label visibility
-        Assembly baselib = null; // ModManager.GetLoadedMods().First(mod => mod.manifest?.id == BaseLib.BaseLibMain.ModId).assembly; // TODO: Removed this no idea how to fix
-        if (baselib?.GetType("BaseLib.Abstracts.ITwoAmountPower") == null) {
+        var baselib = typeof(BaseLib.BaseLibMain).Assembly;
+        if (baselib.GetType("BaseLib.Abstracts.ITwoAmountPower") == null) {
             amount2Label.Visible = false;
         }
         DisplaySecondAmount.TryGetValue(__instance.Model.GetType(), out var func);
@@ -162,8 +161,14 @@ static class TwoAmountPowers
         static void CallRefreshAmount(PowerModel __instance)
         {
             doNotFlashOnAmountRefresh = true;
-            __instance.InvokeDisplayAmountChanged();
-            doNotFlashOnAmountRefresh = true;
+            try
+            {
+                __instance.InvokeDisplayAmountChanged();
+            }
+            finally
+            {
+                doNotFlashOnAmountRefresh = false;
+            }
         }
         
         [HarmonyTargetMethods]
@@ -175,7 +180,6 @@ static class TwoAmountPowers
                 typeof(JugglingPower).Method(nameof(JugglingPower.AfterApplied)),
                 typeof(JugglingPower).Method(nameof(JugglingPower.AfterCardPlayed)),
                 typeof(JugglingPower).Method(nameof(JugglingPower.AfterSideTurnEnd)),
-                typeof(PaleBlueDotPower).Method(nameof(PaleBlueDotPower.ModifyHandDraw)),
                 typeof(ToricToughnessPower).Method(nameof(ToricToughnessPower.SetBlock)),
                 typeof(InfernoPower).Method(nameof(InfernoPower.IncrementSelfDamage)),
                 typeof(CrimsonMantlePower).Method(nameof(CrimsonMantlePower.IncrementSelfDamage)),
@@ -189,7 +193,7 @@ static class TwoAmountPowers
                 { typeof(Hook).Method(nameof(Hook.AfterCardPlayed)).PatchAsync(), [typeof(PaleBlueDotPower)] },
                 { typeof(Hook).Method(nameof(Hook.AfterPowerAmountChanged)).PatchAsync(), [typeof(VulnerablePower), typeof(WeakPower)] },
                 { typeof(Hook).Method(nameof(Hook.AfterBlockGained)).PatchAsync(), [typeof(UnmovablePower)] },
-                { typeof(Hook).Method(nameof(Hook.AfterPlayerTurnStart)).PatchAsync(), [typeof(UnmovablePower)] },
+                { typeof(Hook).Method(nameof(Hook.AfterPlayerTurnStart)).PatchAsync(), [typeof(UnmovablePower), typeof(PaleBlueDotPower)] },
             };
         
             private static void AfterHook(AbstractModel model, MethodBase method)
@@ -260,4 +264,3 @@ static class TwoAmountPowers
         return true;
     }
 }
-*/
