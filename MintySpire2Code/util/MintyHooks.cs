@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models.Relics;
+using System.Reflection;
 using MintySpire2.MintySpire2Code.relicreminders;
 using MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
@@ -19,7 +20,7 @@ public class MintyHooks
      * and then wait for its execution to finish and execute my logic after.
      * I hope you enjoyed this small peak into the pains I go to, to make this a good mod.
      */
-    
+
     [HarmonyPatch(typeof(Hook), nameof(Hook.AfterBlockGained))]
     public static class BlockGainHook
     {
@@ -120,9 +121,16 @@ public class MintyHooks
         }
     }
 
-    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterSideTurnEnd))]
+    [HarmonyPatch]
     public static class AfterSideTurnEndHook
     {
+        public static MethodBase TargetMethod()
+        {
+            return AccessTools.Method(typeof(Hook), "AfterSideTurnEnd")
+                   ?? AccessTools.Method(typeof(Hook), "AfterTurnEnd")
+                   ?? throw new MissingMethodException(typeof(Hook).FullName, "AfterSideTurnEnd/AfterTurnEnd");
+        }
+
         [HarmonyPostfix]
         public static void Postfix(CombatSide side, ref Task __result)
         {

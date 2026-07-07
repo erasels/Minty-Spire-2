@@ -14,6 +14,8 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
 using MintySpire2.MintySpire2Code.util;
+using System.Reflection;
+using MegaCrit.Sts2.Core.ValueProps;
 
 namespace MintySpire2.MintySpire2Code.combat;
 
@@ -26,7 +28,7 @@ public static class SummedIncomingDamageRender
 {
     private const string RightTextNodeName = "MintyIncomingDamageText";
     private const float RightPadding = 6f;
-    
+
     private static readonly WeakNodeRegistry<NHealthBar> ValidBars = new();
 
     /// <summary>
@@ -42,7 +44,7 @@ public static class SummedIncomingDamageRender
             CreateLabelIfNotExist(__instance);
         }
     }
-    
+
     /// <summary>
     ///     Whenever the bar is updated, update the text display (this is overkill)
     /// </summary>
@@ -91,7 +93,7 @@ public static class SummedIncomingDamageRender
             MouseFilter = Control.MouseFilterEnum.Ignore,
             Visible = false
         };
-        
+
         var font = GD.Load<Font>("res://fonts/kreon_bold.ttf");
         if (font != null)
             label.AddThemeFontOverride((StringName)"font", font);
@@ -167,7 +169,7 @@ public static class SummedIncomingDamageRender
 
         label.Visible = false;
     }
-    
+
     /// <summary>
     ///     Refresh labels when a creature death is fired to recalculate incoming damage immediately.
     /// </summary>
@@ -189,15 +191,15 @@ public static class SummedIncomingDamageRender
         incomingCardDamage = newInc;
         ValidBars.ForEachLive(RefreshVisibilityAndText);
     }
-    
+
     private static int GetIncomingCardDamage(Player player)
     {
         if (!Config.ShowIncomingDamage) return 0;
-        
+
         var handPile = CardPile.Get(PileType.Hand, player);
         if (handPile == null)
             return 0;
-        
+
         int totalDamage = 0;
 
         foreach (var card in  handPile.Cards)
@@ -218,7 +220,7 @@ public static class SummedIncomingDamageRender
         if (creature.CombatState == null)
             return damageVar.IntValue;
 
-        var damage = Hook.ModifyDamage(
+        var damage = ModifyDamageCompat(
             player.RunState,
             creature.CombatState,
             creature,
@@ -228,12 +230,43 @@ public static class SummedIncomingDamageRender
             card,
             null,
             ModifyDamageHookType.All,
-            CardPreviewMode.None,
-            out _);
+            CardPreviewMode.None);
 
         return Math.Max(0, (int)damage);
     }
-    
+
+    private static readonly MethodInfo ModifyDamageMethod = AccessTools.GetDeclaredMethods(typeof(Hook))
+        .Single(method => method.Name == nameof(Hook.ModifyDamage)
+                          && method.GetParameters() is { Length: 10 or 11 } parameters
+                          && parameters[^1].IsOut);
+
+    private static decimal ModifyDamageCompat(
+        IRunState runState,
+        object combatState,
+        Creature? target,
+        Creature? dealer,
+        decimal damage,
+        ValueProp props,
+        CardModel? cardSource,
+        CardPlay? cardPlay,
+        ModifyDamageHookType modifyDamageHookType,
+        CardPreviewMode previewMode)
+    {
+        var parameters = ModifyDamageMethod.GetParameters();
+        var args = parameters.Length == 11
+            ? new object?[]
+            {
+                runState, combatState, target, dealer, damage, props, cardSource, cardPlay, modifyDamageHookType, previewMode, null
+            }
+            : new object?[]
+            {
+                runState, combatState, target, dealer, damage, props, cardSource, modifyDamageHookType, previewMode, null
+            };
+
+        return (decimal)ModifyDamageMethod.Invoke(null, args)!;
+    }
+
+
     /// <summary>
     ///     Refresh labels if the hand changes in case end turn damage cards are added
     /// </summary>
@@ -271,7 +304,7 @@ public static class SummedIncomingDamageRender
     private static int CalculateIncomingDamage(Creature creature)
     {
         if (creature.CombatState == null) return 0;
-        
+
         // Collect incoming damage from all hittable monsters (can untargetable monsters attack?).
         var incomingDamage = 0;
         foreach (var hittableEnemy in creature.CombatState!.HittableEnemies)
@@ -285,10 +318,10 @@ public static class SummedIncomingDamageRender
 
         // Knowledge demon end of turn damage
         incomingDamage += creature.GetPower<DisintegrationPower>()?.Amount ?? 0;
-        
+
         // Constrict power
         incomingDamage += creature.GetPower<ConstrictPower>()?.Amount ?? 0;
-        
+
         // End turn self damage cards can be affected by current powers.
         if (creature.Player != null)
             incomingDamage += GetIncomingCardDamage(creature.Player);
