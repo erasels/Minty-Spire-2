@@ -13,7 +13,9 @@ namespace MintySpire2.MintySpire2Code;
  *
  * Moves Bowler Hat before the gold reward after combat, so you don't miss the 25% extra gold in the combat you obtain it.
  * Original credits: Mangochicken.
- * 
+ *
+ * moves war paint and whetstone after card rewards, so you are less likely to upgrade two strikes or two defends :)
+ *
  * Changes the order of combat rewards so "special" card rewards (Thieving Hopper and Lantern Key) are below normal card
  * rewards. This is done because clicking rewards in their normal order causes a long delay while you wait for the
  * special card to stop covering up the middle card of the card reward.
@@ -45,6 +47,7 @@ static class RewardDisplayOrderPatch
 
         MoveToFirst(reordered, button => button is NRewardButton { Reward: RelicReward { Relic: BowlerHat } });
         MoveToLast(reordered, button => button is NRewardButton { Reward: SpecialCardReward });
+        MoveToLast(reordered, button => button is NRewardButton { Reward: RelicReward { Relic: WarPaint or Whetstone } });
 
         if (reordered.SequenceEqual(screen._rewardButtons))
             return;
