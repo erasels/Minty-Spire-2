@@ -234,6 +234,25 @@ public static class SummedIncomingDamageRender
 
         return Math.Max(0, (int)damage);
     }
+    
+    private static int GetModifiedIncomingPowerDamage(Creature creature, PowerModel power, ValueProp props)
+    {
+        if (creature.CombatState == null) return Math.Max(0, power.Amount);
+
+        var damage = ModifyDamageCompat(
+            RunManager.Instance.State,
+            creature.CombatState,
+            creature,
+            creature,
+            power.Amount,
+            props,
+            null,
+            null,
+            ModifyDamageHookType.All,
+            CardPreviewMode.None);
+
+        return Math.Max(0, (int)damage);
+    }
 
     private static readonly MethodInfo ModifyDamageMethod = AccessTools.GetDeclaredMethods(typeof(Hook))
         .Single(method => method.Name == nameof(Hook.ModifyDamage)
@@ -312,15 +331,23 @@ public static class SummedIncomingDamageRender
             foreach (var intent in hittableEnemy.Monster.NextMove.Intents)
             {
                 if (intent.IntentType is IntentType.Attack or IntentType.DeathBlow)
-                    incomingDamage += ((AttackIntent)intent).GetTotalDamage([creature], hittableEnemy); // Is null alright here?
+                    incomingDamage += ((AttackIntent)intent).GetTotalDamage([creature], hittableEnemy);
             }
         }
 
         // Knowledge demon end of turn damage
-        incomingDamage += creature.GetPower<DisintegrationPower>()?.Amount ?? 0;
+        var disintegration = creature.GetPower<DisintegrationPower>();
+        if (disintegration != null)
+        {
+            incomingDamage += GetModifiedIncomingPowerDamage(creature, disintegration, ValueProp.Unpowered);
+        }
 
         // Constrict power
-        incomingDamage += creature.GetPower<ConstrictPower>()?.Amount ?? 0;
+        var constrict = creature.GetPower<ConstrictPower>();
+        if (constrict != null)
+        {
+            incomingDamage += GetModifiedIncomingPowerDamage(creature, constrict, ValueProp.Unpowered);
+        }
 
         // End turn self damage cards can be affected by current powers.
         if (creature.Player != null)
