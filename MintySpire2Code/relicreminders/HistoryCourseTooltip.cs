@@ -3,6 +3,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 
@@ -23,6 +24,10 @@ static class HistoryCourseTooltip
     {
         bool isThisPlayer = cardPlay.Card.Owner == relic.Owner;
         bool isAttackOrSkill = cardPlay.Card.Type is CardType.Attack or CardType.Skill;
+        if (ModManager._gameVersion != null && ModManager._gameVersion.Minor >= 109)
+        {
+            isAttackOrSkill = cardPlay.Card.Type is CardType.Attack;
+        }
         bool isDupe = cardPlay.Card.IsDupe;
         return isThisPlayer && isAttackOrSkill && !isDupe;
     }
