@@ -233,6 +233,7 @@ public static class ThresholdRelicCardOverlay
     
     private static void IdentifyThresholdRelic(RelicModel relic)
     {
+        if (relic.IsMelted) return;
         switch (relic)
         {
             case PenNib pn:

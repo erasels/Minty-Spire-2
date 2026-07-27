@@ -124,7 +124,7 @@ public static class RestHPRender
     private static decimal ApplyRelicHealModifiers(Player player, decimal baseAmount)
     {
         var amount = baseAmount;
-        var relics = player.Relics;
+        var relics = player.Relics.Where(r => !r.IsMelted).ToList();;
 
         // Basically regal pillow
         foreach (var relic in relics) amount = relic.ModifyRestSiteHealAmount(player.Creature, amount);

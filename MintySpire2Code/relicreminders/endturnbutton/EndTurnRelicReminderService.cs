@@ -45,7 +45,7 @@ public static class EndTurnRelicReminderService
         var reminders = new List<RelicModel>(2);
         foreach (var relic in me.Relics)
         {
-            if (ReminderRules.TryGetValue(relic.GetType(), out var rule) && rule(relic, me))
+            if (!relic.IsMelted && ReminderRules.TryGetValue(relic.GetType(), out var rule) && rule(relic, me))
                 reminders.Add(relic);
         }
 
