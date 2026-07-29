@@ -19,7 +19,7 @@ public class PaelsLookingEyePatch()
 {
     private static Texture2D? PaelsEyeBase {
         get {
-            var loaded = ProjectSettings.LoadResourcePack(OS.GetExecutablePath().GetBaseDir().PathJoin("mods/MintySpire2/MintySpire2.pck"));
+            var loaded = ProjectSettings.LoadResourcePack(typeof(MintyInit).Assembly.Location.Replace("dll", "pck"));
             if (loaded) {
                 var eye = ResourceLoader.Load<Texture2D>("res://MintySpire2/images/relics/paels_eye_base.png");
                 return eye;
