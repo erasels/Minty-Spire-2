@@ -19,16 +19,8 @@ public class PaelsLookingEyePatch()
 {
     private static Texture2D? PaelsEyeBase {
         get {
-            var loaded = ProjectSettings.LoadResourcePack(typeof(MintyInit).Assembly.Location.Replace("dll", "pck"));
-            if (loaded) {
-                var eye = ResourceLoader.Load<Texture2D>("res://MintySpire2/images/relics/paels_eye_base.png");
-                return eye;
-            }
-            else {
-                MintyInit.Logger.Info("Oh my god its broken again");
-            }
-
-            return null;
+            var eye = ResourceLoader.Load<Texture2D>("res://MintySpire2/images/relics/paels_eye_base.png");
+            return eye;
         }
     }
 
@@ -52,7 +44,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnInventoryRelicReady(NRelicInventoryHolder __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
         
         var relic = __instance.Relic;
         var model = relic.Model;
@@ -71,7 +63,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnBaseRelicReady(NRelicBasicHolder __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
 
         var relic = __instance.Relic;
         var model = relic.Model;
@@ -90,7 +82,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnEventOptionButtonReady(NEventOptionButton __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
 
         if (__instance.Event is AncientEventModel && __instance.Option.Relic is PaelsEye)
         {
@@ -108,7 +100,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnRelicCollectionEntryReady(NRelicCollectionEntry __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
 
         if (__instance.relic is PaelsEye && __instance.ModelVisibility == ModelVisibility.Visible)
         {
@@ -124,7 +116,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnInspectRelicReady(NInspectRelicScreen __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
 
         var icon_node = __instance._relicImage;
         if (HasLookingEyeScene(icon_node) == null)
@@ -135,7 +127,7 @@ public class PaelsLookingEyePatch()
     [HarmonyPostfix]
     static void OnInspectRelicRedraw(NInspectRelicScreen __instance)
     {
-        if (!Config.EnableJokes) return;
+        if (!Config.EnableJokes || PaelsEyeBase is null) return;
 
         var relicModel = __instance._relics[__instance._index];
         var icon_node = __instance._relicImage;
