@@ -55,16 +55,17 @@ public static class SummedIncomingDamageRender
         var player = LocalContext.GetMe(RunManager.Instance.State);
         if (player != null && __instance._creature?.Player == player)
         {
+            CreateLabelIfNotExist(__instance);
             ValidBars.Register(__instance);
             RefreshVisibilityAndText(__instance);
         }
     }
 
     /// <summary>
-    ///     When the container size is about to change, reposition the label
+    ///     When the container size changes, reposition the label.
     /// </summary>
     [HarmonyPostfix]
-    [HarmonyPatch(typeof(NHealthBar), "SetHpBarContainerSizeWithOffsets")]
+    [HarmonyPatch(typeof(NHealthBar), "SetHpBarContainerSizeWithOffsetsImmediately")]
     public static void CatchBarResize(NHealthBar __instance, Vector2 size)
     {
         var player = LocalContext.GetMe(RunManager.Instance.State);
@@ -142,7 +143,7 @@ public static class SummedIncomingDamageRender
     private static void RefreshVisibilityAndText(NHealthBar bar)
     {
         var label = bar.GetNode(RightTextNodeName) as Label;
-        if (label == null || !bar.Visible)
+        if (label == null)
             return;
 
         if (!Config.ShowIncomingDamage || CombatManager.Instance.IsEnemyTurnStarted)
