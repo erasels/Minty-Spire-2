@@ -40,6 +40,9 @@ public static class AscHoverTooltips
         [HarmonyPrefix]
         public static bool Prefix(NTopBarPortraitTip __instance)
         {
+            if (!Config.AscHoverTooltip)
+                return true;
+
             if (!__instance.ShowTip)
                 return false;
             NHoverTipSet.CreateAndShow(__instance, _myTips).GlobalPosition = __instance.GlobalPosition + new Vector2(0, __instance.Size.Y + 20);

@@ -5,6 +5,7 @@
   "MINTYSPIRE2-SHOW_INCOMING_DAMAGE.title": "Display incoming damage next to HP bar",
   "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "Size of incoming damage text (Default: 14)",
   "MINTYSPIRE2-MISC.title": "Miscellaneous",
-  "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "Show stolen card after card reward (Thieving Hopper)",
+  "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "Reorder specific combat rewards",
+  "MINTYSPIRE2-ASC_HOVER_TOOLTIP.title": "Show Ascension effects when hovering the player portrait",
   "MINTYSPIRE2-ENABLE_JOKES.title": "Show joke changes like Pael's Eye following the cursor"
 }
