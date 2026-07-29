@@ -71,6 +71,22 @@ public class MintyHooks
             ThresholdRelicCardOverlay.RefreshTrackedCardOverlays();
         }
     }
+    
+    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterCardDrawn))]
+    public static class AfterCardDrawnHook
+    {
+        [HarmonyPostfix]
+        public static void Postfix(ref Task __result)
+        {
+            __result = PostfixAsync(__result);
+        }
+
+        private static async Task PostfixAsync(Task originalTask)
+        {
+            await originalTask;
+            EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
+        }
+    }
 
     [HarmonyPatch(typeof(Hook), nameof(Hook.AfterEnergySpent))]
     public static class AfterEnergySpentHook
