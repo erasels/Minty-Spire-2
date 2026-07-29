@@ -28,6 +28,7 @@ public partial class EndTurnRelicReminderContainer : HBoxContainer
 
     private readonly Dictionary<string, TextureRect> _icons = new();
     private readonly Dictionary<string, Tween> _tweens = new();
+    private readonly HashSet<string> _fadingOut = [];
 
     public override void _Ready()
     {
@@ -68,8 +69,15 @@ public partial class EndTurnRelicReminderContainer : HBoxContainer
         foreach (var reminder in reminders)
         {
             var reminderId = reminder.Id.Entry;
-            if (_icons.ContainsKey(reminderId))
+            if (_icons.TryGetValue(reminderId, out var existingIcon))
+            {
+                // The reminder may have become relevant again while its removal
+                // animation was still running. Reverse that animation instead of
+                // allowing its completion callback to remove a relevant icon.
+                if (_fadingOut.Remove(reminderId))
+                    FadeTo(reminderId, existingIcon, 1f);
                 continue;
+            }
 
             var texture = reminder.Icon;
 
@@ -96,9 +104,12 @@ public partial class EndTurnRelicReminderContainer : HBoxContainer
     {
         if (!_icons.TryGetValue(reminderId, out var icon))
             return;
+        if (!_fadingOut.Add(reminderId))
+            return;
 
         FadeTo(reminderId, icon, 0f, () =>
         {
+            _fadingOut.Remove(reminderId);
             if (_icons.Remove(reminderId))
                 icon.QueueFree();
             if (_icons.Count == 0)
