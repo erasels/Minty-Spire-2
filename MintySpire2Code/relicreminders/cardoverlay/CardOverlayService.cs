@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
+using MintySpire2.MintySpire2Code;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.cardoverlay;
 
@@ -40,17 +41,23 @@ public static class CardOverlayService
     public static void RegisterPower<TP>(Func<TP, CardModel, bool> rule) where TP : PowerModel
         => _powerRules[typeof(TP)] = (p, c) => rule((TP)p, c);
 
-    public static void NotifyOverlaysMayHaveChanged() => OverlaysChanged?.Invoke();
+    public static void NotifyOverlaysMayHaveChanged()
+    {
+        if (!Config.CardOverlayReminders) return;
+        OverlaysChanged?.Invoke();
+    }
 
     public static List<Texture2D> GetActiveIcons(CardModel card)
     {
         var icons = new List<Texture2D>(4);
+        if (!Config.CardOverlayReminders) return icons;
         CollectActiveIcons(card, icons);
         return icons;
     }
 
     public static bool HasAnyActiveFor(CardModel card)
     {
+        if (!Config.CardOverlayReminders) return false;
         CollectActiveIcons(card, _scratch);
         return _scratch.Count > 0;
     }

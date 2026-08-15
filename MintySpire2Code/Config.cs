@@ -2,7 +2,7 @@
 
 namespace MintySpire2.MintySpire2Code;
 
-public class Config: SimpleModConfig
+public class Config : SimpleModConfig
 {
     [ConfigHideInUI]
     [ConfigSlider(0.1, 1.0, 0.1, Format = "{0:0.0}x")]
@@ -18,4 +18,11 @@ public class Config: SimpleModConfig
     public static bool EnableJokes { get; set; } = true;
     public static bool ChangeRewardOrder { get; set; } = true;
     public static bool AscHoverTooltip { get; set; } = true;
+
+    [ConfigSection("reminders")]
+    public static bool CardOverlayReminders { get; set; } = true;
+    [ConfigVisibleIf(nameof(CardOverlayReminders), true)]
+    public static bool RelicCardGlow { get; set; } = true;
+    public static bool EndTurnButtonReminders { get; set; } = true;
+    public static bool OutOfCombatReminders { get; set; } = true;
 }

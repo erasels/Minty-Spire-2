@@ -4,6 +4,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
 using MegaCrit.Sts2.Core.Nodes.Combat;
+using MintySpire2.MintySpire2Code;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.cardoverlay;
 
@@ -36,6 +37,7 @@ public static class CardOverlayRenderer
     [HarmonyPostfix]
     public static void OverrideGoldGlow(CardModel __instance, ref bool __result)
     {
+        if (!Config.RelicCardGlow) return;
         if (!__result)
             __result = CardOverlayService.HasAnyActiveFor(__instance);
     }

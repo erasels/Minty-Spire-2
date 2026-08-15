@@ -6,6 +6,7 @@ using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Runs;
+using MintySpire2.MintySpire2Code;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
@@ -34,6 +35,8 @@ public static class EndTurnRelicReminderService
 
     public static IReadOnlyList<RelicModel> GetCurrentReminders()
     {
+        if (!Config.EndTurnButtonReminders) return [];
+
         var me = LocalContext.GetMe(RunManager.Instance.State);
         if (me == null)
             return [];
@@ -52,7 +55,11 @@ public static class EndTurnRelicReminderService
         return reminders;
     }
 
-    public static void NotifyRemindersMayHaveChanged() => RemindersChanged?.Invoke();
+    public static void NotifyRemindersMayHaveChanged()
+    {
+        if (!Config.EndTurnButtonReminders) return;
+        RemindersChanged?.Invoke();
+    }
 
     // Generic method that works for all relics that "pulse" when they can still trigger
     private static bool ShouldShowStatusActive(RelicModel relic, Player me)

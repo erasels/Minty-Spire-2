@@ -27,6 +27,7 @@ public static class FoulPotionReminderPatch
     [HarmonyPostfix]
     static void Postfix(NMerchantRoom __instance)
     {
+        if (!Config.OutOfCombatReminders) return;
         if (!Config.EnableJokes) return;
 
         var me = Wiz.p();

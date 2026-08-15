@@ -7,5 +7,10 @@
   "MINTYSPIRE2-MISC.title": "杂项",
   "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "调整特定战斗奖励的顺序",
   "MINTYSPIRE2-ASC_HOVER_TOOLTIP.title": "悬停玩家头像时显示进阶",
-  "MINTYSPIRE2-ENABLE_JOKES.title": "显示玩笑改动，例如佩尔之眼跟随光标"
+  "MINTYSPIRE2-ENABLE_JOKES.title": "显示玩笑改动，例如佩尔之眼跟随光标",
+  "MINTYSPIRE2-REMINDERS.title": "提醒",
+  "MINTYSPIRE2-CARD_OVERLAY_REMINDERS.title": "在卡牌上显示遗物/能力提醒图标",
+  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "使受遗物/能力影响的卡牌呈黄色发光效果",
+  "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "在结束回合按钮上显示遗物提醒",
+  "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "显示非战斗提醒（如商店中的浊液药水）"
 }

@@ -7,5 +7,10 @@
   "MINTYSPIRE2-MISC.title": "Miscellaneous",
   "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "Reorder specific combat rewards",
   "MINTYSPIRE2-ASC_HOVER_TOOLTIP.title": "Show Ascension effects when hovering the player portrait",
-  "MINTYSPIRE2-ENABLE_JOKES.title": "Show joke changes like Pael's Eye following the cursor"
+  "MINTYSPIRE2-ENABLE_JOKES.title": "Show joke changes like Pael's Eye following the cursor",
+  "MINTYSPIRE2-REMINDERS.title": "Reminders",
+  "MINTYSPIRE2-CARD_OVERLAY_REMINDERS.title": "Show relic/power reminder icons on cards",
+  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "Give cards affected by relics/powers a yellow glow",
+  "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "Show relic reminders under the End Turn button",
+  "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "Show out-of-combat reminders (e.g. Foul Potion in shops)"
 }
