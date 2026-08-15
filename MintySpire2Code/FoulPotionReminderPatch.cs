@@ -1,4 +1,3 @@
-using System.Linq;
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Localization;
@@ -8,7 +7,7 @@ using MegaCrit.Sts2.Core.Nodes.Potions;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MintySpire2.MintySpire2Code.util;
 
-namespace MintySpire2.MintySpire2Code.jokes;
+namespace MintySpire2.MintySpire2Code;
 
 /// <summary>
 /// When the local player enters a shop while carrying a FoulPotion, the merchant uses a speech bubble
@@ -25,6 +24,7 @@ public static class FoulPotionReminderPatch
     private const double BounceInterval = 1.0;
     private const string _bounceTimerName = "MintyFoulPotionBounceLoop";
 
+    [HarmonyPostfix]
     static void Postfix(NMerchantRoom __instance)
     {
         if (!Config.EnableJokes) return;
