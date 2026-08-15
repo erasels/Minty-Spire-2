@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models.Relics;
 using System.Reflection;
 using MintySpire2.MintySpire2Code.relicreminders;
+using MintySpire2.MintySpire2Code.relicreminders.cardoverlay;
 using MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
 
 namespace MintySpire2.MintySpire2Code.util;
@@ -68,7 +69,7 @@ public class MintyHooks
             await originalTask;
             EndTurnRelicReminderService.NotifyRemindersMayHaveChanged();
             HistoryCourseTooltip.HistoryStartPulse(Wiz.p()?.GetRelic<HistoryCourse>(), cardPlay);
-            ThresholdRelicCardOverlay.RefreshTrackedCardOverlays();
+            CardOverlayService.NotifyOverlaysMayHaveChanged();
         }
     }
     
@@ -189,7 +190,7 @@ public class MintyHooks
         private static async Task PostfixAsync(Task originalTask)
         {
             await originalTask;
-            ThresholdRelicCardOverlay.RefreshTrackedCardOverlays();
+            CardOverlayService.NotifyOverlaysMayHaveChanged();
         }
     }
 }
