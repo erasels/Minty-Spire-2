@@ -42,8 +42,6 @@ public static class CardOverlayService
 
     public static void NotifyOverlaysMayHaveChanged() => OverlaysChanged?.Invoke();
 
-    public static bool HasAny() => _relicRules.Count > 0 || _powerRules.Count > 0;
-
     public static List<Texture2D> GetActiveIcons(CardModel card)
     {
         var icons = new List<Texture2D>(4);

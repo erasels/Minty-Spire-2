@@ -42,7 +42,6 @@ public static class CardOverlayRenderer
 
     private static void RefreshTrackedCardOverlays()
     {
-        if (!CardOverlayService.HasAny()) return;
         foreach (var holder in GetActiveHolders())
         {
             RefreshCardOverlay(holder);
@@ -55,7 +54,7 @@ public static class CardOverlayRenderer
         var card = holder.CardNode;
         if (card == null) return;
         var model = card.Model;
-        if (model == null || !CardOverlayService.HasAny())
+        if (model == null)
         {
             HideIcons(holder);
             return;
