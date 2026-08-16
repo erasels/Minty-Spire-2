@@ -1,3 +1,5 @@
+using System.Linq;
+using System.Reflection;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
@@ -13,6 +15,7 @@ public static class RestSiteRelicReminderService
     private record Registration(Type RelicType, Func<RelicModel, Player, bool>? ShowWhen = null);
 
     private static readonly Dictionary<string, List<Registration>> _byOption = new();
+    private const string HEAL_OPTION_ID = "HEAL";
 
     static RestSiteRelicReminderService()
     {
@@ -20,8 +23,9 @@ public static class RestSiteRelicReminderService
         Register<RegalPillow>("HEAL");
         Register<DreamCatcher>("HEAL");
         Register<StoneHumidifier>("HEAL");
+        RegisterRestOptionHookRelics();
         // Pantograph shows before the boss since healing can be made redundant.
-        Register<Pantograph>("HEAL", (_, player) => IsNextNodeBoss(player));
+        Register<Pantograph>(HEAL_OPTION_ID, (_, player) => IsNextNodeBoss(player));
     }
 
     /// <summary>
@@ -89,5 +93,36 @@ public static class RestSiteRelicReminderService
     {
         var current = player.RunState.CurrentMapPoint;
         return current != null && player.RunState.Map.BossMapPoint.parents.Contains(current);
+    }
+    
+    /// <summary>
+    ///     Register any <see cref="RelicModel"/> that uses one of the resting hooks and isn't
+    ///     already registered for the heal option.
+    /// </summary>
+    private static void RegisterRestOptionHookRelics()
+    {
+        var hookNames = new[]
+        {
+            nameof(AbstractModel.ModifyExtraRestSiteHealText),
+            nameof(AbstractModel.AfterRestSiteHeal),
+            nameof(AbstractModel.ModifyRestSiteHealAmount)
+        };
+
+        var alreadyRegistered = _byOption.TryGetValue(HEAL_OPTION_ID, out var existing)
+            ? new HashSet<Type>(existing.Select(r => r.RelicType))
+            : [];
+
+        foreach (var relic in ModelDb.AllRelics)
+        {
+            var relicType = relic.GetType();
+
+            if (alreadyRegistered.Contains(relicType))
+                continue;
+
+            if (hookNames.Any(name => relicType.GetMethod(name)?.DeclaringType != typeof(AbstractModel)))
+            {
+                Register(HEAL_OPTION_ID, relicType);
+            }
+        }
     }
 }
