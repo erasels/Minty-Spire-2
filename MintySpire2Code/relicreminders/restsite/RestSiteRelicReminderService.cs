@@ -16,6 +16,7 @@ public static class RestSiteRelicReminderService
 
     private static readonly Dictionary<string, List<Registration>> _byOption = new();
     private const string HEAL_OPTION_ID = "HEAL";
+    private const string SMITH_OPTION_ID = "SMITH";
 
     static RestSiteRelicReminderService()
     {
@@ -23,7 +24,7 @@ public static class RestSiteRelicReminderService
         Register<RegalPillow>("HEAL");
         Register<DreamCatcher>("HEAL");
         Register<StoneHumidifier>("HEAL");
-        RegisterRestOptionHookRelics();
+        RegisterRestsiteOptionHookRelics();
         // Pantograph shows before the boss since healing can be made redundant.
         Register<Pantograph>(HEAL_OPTION_ID, (_, player) => IsNextNodeBoss(player));
     }
@@ -96,21 +97,24 @@ public static class RestSiteRelicReminderService
     }
     
     /// <summary>
-    ///     Register any <see cref="RelicModel"/> that uses one of the resting hooks and isn't
-    ///     already registered for the heal option.
+    ///     Register any <see cref="RelicModel"/> that uses one of the rest site (heal or smith) hooks
+    ///     and isn't already registered for any rest site option.
     /// </summary>
-    private static void RegisterRestOptionHookRelics()
+    private static void RegisterRestsiteOptionHookRelics()
     {
-        var hookNames = new[]
+        var healHookNames = new[]
         {
             nameof(AbstractModel.ModifyExtraRestSiteHealText),
             nameof(AbstractModel.AfterRestSiteHeal),
             nameof(AbstractModel.ModifyRestSiteHealAmount)
         };
 
-        var alreadyRegistered = _byOption.TryGetValue(HEAL_OPTION_ID, out var existing)
-            ? new HashSet<Type>(existing.Select(r => r.RelicType))
-            : [];
+        var smithHookNames = new[]
+        {
+            nameof(AbstractModel.AfterRestSiteSmith)
+        };
+
+        var alreadyRegistered = new HashSet<Type>(_byOption.SelectMany(kvp => kvp.Value.Select(r => r.RelicType)));
 
         foreach (var relic in ModelDb.AllRelics)
         {
@@ -119,9 +123,13 @@ public static class RestSiteRelicReminderService
             if (alreadyRegistered.Contains(relicType))
                 continue;
 
-            if (hookNames.Any(name => relicType.GetMethod(name)?.DeclaringType != typeof(AbstractModel)))
+            if (healHookNames.Any(name => relicType.GetMethod(name)?.DeclaringType != typeof(AbstractModel)))
             {
                 Register(HEAL_OPTION_ID, relicType);
+            }
+            else if (smithHookNames.Any(name => relicType.GetMethod(name)?.DeclaringType != typeof(AbstractModel)))
+            {
+                Register(SMITH_OPTION_ID, relicType);
             }
         }
     }
