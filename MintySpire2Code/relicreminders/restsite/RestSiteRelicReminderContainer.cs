@@ -7,10 +7,10 @@ using MegaCrit.Sts2.Core.Nodes.RestSite;
 namespace MintySpire2.MintySpire2Code.relicreminders.restsite;
 
 /// <summary>
-///     A row of small relic icons shown below a <see cref="NRestSiteButton"/>, indicating which owned
+///     A column of small relic icons shown to the left of a <see cref="NRestSiteButton"/>, indicating which owned
 ///     relics affect that option. Applicable relics are defined in <see cref="RestSiteRelicReminderService"/>.
 /// </summary>
-public partial class RestSiteRelicReminderContainer : HBoxContainer
+public partial class RestSiteRelicReminderContainer : VBoxContainer
 {
     [HarmonyPatch]
     private static class RestSiteRelicReminderContainerPatch
@@ -48,23 +48,23 @@ public partial class RestSiteRelicReminderContainer : HBoxContainer
     }
 
     private const float IconSize = 40f;
+    private const float LeftGap = 8f;
 
     private readonly Dictionary<string, TextureRect> _icons = new();
 
     public override void _Ready()
     {
-        // Sits just below the option label (aka "Heal" for Rest)
         AnchorLeft = 0f;
-        AnchorRight = 1f;
-        AnchorTop = 1f;
+        AnchorRight = 0f;
+        AnchorTop = 0f;
         AnchorBottom = 1f;
-        OffsetLeft = 0f;
-        OffsetRight = 0f;
-        OffsetTop = 48f;
-        OffsetBottom = 88f;
+        OffsetLeft = -(IconSize + LeftGap);
+        OffsetRight = -LeftGap;
+        OffsetTop = 0f;
+        OffsetBottom = 0f;
 
-        Alignment = AlignmentMode.Center;
-        AddThemeConstantOverride("separation", 4);
+        Alignment = AlignmentMode.Begin;
+        AddThemeConstantOverride("separation", 2);
         MouseFilter = MouseFilterEnum.Ignore;
         Visible = false;
     }
