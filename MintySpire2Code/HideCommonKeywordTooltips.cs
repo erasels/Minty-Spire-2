@@ -21,6 +21,7 @@ public static class HideCommonKeywordTooltips
         "card_keywords.ETHEREAL.",
         "card_keywords.INNATE.",
         "card_keywords.RETAIN.",
+        "card_keywords.UNPLAYABLE.",
         "static_hover_tips.BLOCK.",
         "static_hover_tips.ENERGY.",
         "static_hover_tips.CHANNELING.",
