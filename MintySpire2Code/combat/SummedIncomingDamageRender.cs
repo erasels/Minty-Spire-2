@@ -1,5 +1,6 @@
 ﻿using Godot;
 using HarmonyLib;
+using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -38,8 +39,7 @@ public static class SummedIncomingDamageRender
     [HarmonyPatch(nameof(NHealthBar.SetCreature))]
     public static void CatchBarSet(NHealthBar __instance)
     {
-        var player = LocalContext.GetMe(RunManager.Instance.State);
-        if (player != null && __instance._creature?.Player == player)
+        if (LocalContext.IsMe(__instance._creature))
         {
             CreateLabelIfNotExist(__instance);
         }
@@ -52,8 +52,7 @@ public static class SummedIncomingDamageRender
     [HarmonyPatch(nameof(NHealthBar.RefreshValues))]
     public static void CatchBarRefresh(NHealthBar __instance)
     {
-        var player = LocalContext.GetMe(RunManager.Instance.State);
-        if (player != null && __instance._creature?.Player == player)
+        if (LocalContext.IsMe(__instance._creature))
         {
             CreateLabelIfNotExist(__instance);
             ValidBars.Register(__instance);
@@ -68,8 +67,7 @@ public static class SummedIncomingDamageRender
     [HarmonyPatch(typeof(NHealthBar), "SetHpBarContainerSizeWithOffsetsImmediately")]
     public static void CatchBarResize(NHealthBar __instance, Vector2 size)
     {
-        var player = LocalContext.GetMe(RunManager.Instance.State);
-        if (player != null && __instance._creature?.Player == player)
+        if (LocalContext.IsMe(__instance._creature))
         {
             RepositionLabel(__instance, size);
         }
@@ -84,13 +82,13 @@ public static class SummedIncomingDamageRender
         if (bar.HasNode(RightTextNodeName))
             return false;
 
-        // Parent to the same node that holds the bar so coordinates are consistent.
         var container = bar.HpBarContainer;
 
-        var label = new Label
+        var label = new MegaLabel
         {
             Name = RightTextNodeName,
             Text = "",
+            AutoSizeEnabled = false,
             MouseFilter = Control.MouseFilterEnum.Ignore,
             Visible = false
         };
@@ -103,9 +101,7 @@ public static class SummedIncomingDamageRender
         label.AddThemeColorOverride("font_color", Colors.Salmon);
         label.AddThemeFontSizeOverride("font_size", Config.IncomingDamageSize);
 
-        // Add to the same parent as the bar container so it's position relative to it.
-        var parent = container.GetParent() as Control ?? bar;
-        parent.AddChild(label);
+        bar.AddChild(label);
         RepositionLabel(bar, container.Size);
         return true;
     }
@@ -130,10 +126,11 @@ public static class SummedIncomingDamageRender
 
         label.Size = new Vector2(labelWidth, labelHeight);
 
-        label.Position = new Vector2(
-            container.Position.X + newSize.X + RightPadding,
-            container.Position.Y + (newSize.Y - labelHeight) / 2f
+        var containerOffset = new Vector2(
+            newSize.X + RightPadding,
+            (newSize.Y - labelHeight) / 2f
         );
+        label.GlobalPosition = container.GetGlobalTransform() * containerOffset;
     }
 
     /// <summary>
@@ -325,14 +322,14 @@ public static class SummedIncomingDamageRender
     {
         if (creature.CombatState == null) return 0;
 
-        // Collect incoming damage from all hittable monsters (can untargetable monsters attack?).
+        // Collect incoming damage from all living monsters.
         var incomingDamage = 0;
-        foreach (var hittableEnemy in creature.CombatState!.HittableEnemies)
+        foreach (var enemy in creature.CombatState.Enemies.Where(enemy => enemy.IsAlive))
         {
-            foreach (var intent in hittableEnemy.Monster.NextMove.Intents)
+            foreach (var intent in enemy.Monster.NextMove.Intents)
             {
                 if (intent.IntentType is IntentType.Attack or IntentType.DeathBlow)
-                    incomingDamage += ((AttackIntent)intent).GetTotalDamage([creature], hittableEnemy);
+                    incomingDamage += ((AttackIntent)intent).GetTotalDamage([creature], enemy);
             }
         }
 
