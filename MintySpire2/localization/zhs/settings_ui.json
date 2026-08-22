@@ -13,5 +13,6 @@
   "MINTYSPIRE2-RELIC_CARD_GLOW.title": "使受遗物/能力影响的卡牌呈黄色发光效果",
   "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "在结束回合按钮上显示遗物提醒",
   "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "显示非战斗提醒（如商店中的浊液药水）",
-  "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "隐藏常见关键词的提示"
+  "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "隐藏常见关键词的提示",
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS.title": "高亮显示被附魔卡牌的名称"
 }

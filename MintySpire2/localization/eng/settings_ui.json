@@ -13,5 +13,6 @@
   "MINTYSPIRE2-RELIC_CARD_GLOW.title": "Give cards affected by relics/powers a yellow glow",
   "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "Show relic reminders under the End Turn button",
   "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "Show out-of-combat reminders (e.g. Foul Potion in shops)",
-  "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "Hide common keyword tooltips"
+  "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "Hide common keyword tooltips",
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS.title": "Highlight the name of enchanted cards"
 }

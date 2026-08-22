@@ -15,10 +15,12 @@ public class Config : SimpleModConfig
     
     
     [ConfigSection("misc")]
-    public static bool EnableJokes { get; set; } = true;
+    public static bool HideCommonKeywordTooltips { get; set; } = false;
+    public static bool HighlightEnchants { get; set; } = true;
     public static bool ChangeRewardOrder { get; set; } = true;
     public static bool AscHoverTooltip { get; set; } = true;
-    public static bool HideCommonKeywordTooltips { get; set; } = false;
+    public static bool EnableJokes { get; set; } = true;
+    
 
     [ConfigSection("reminders")]
     public static bool CardOverlayReminders { get; set; } = true;
