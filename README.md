@@ -26,6 +26,7 @@ Successor of the StS1 mod with the same name. This is a compilation of small qua
 - Make's the Pael's Eye relic look at the mouse cursor (mangochicken)
 - Toggle common keyword tooltips
 - Highlight names of enchanted cards (Plüschgiraffe)
+- Click map legend icons to toggle persistent highlights for each room type
 
 ## Configuration
 Some more invasive features can now be toggled via the mod settings. To access them, navigate to the mod menu via the options menu while on the main menu and then select Minty Spire 2 from the list. THere should be a gear icon in the top right, above the mod's image. Click that gear icon to access the menu.
