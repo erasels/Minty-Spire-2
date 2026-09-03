@@ -20,6 +20,7 @@ public static class SumMultiDamage
     /// </summary>
     public static void Postfix(MultiAttackIntent __instance, IEnumerable<Creature> targets, Creature owner, ref LocString __result)
     {
-        __result.Add("Repeat", $"{__instance.Repeats} ({__instance.GetTotalDamage(targets, owner)})");
+        if(Config.ShowSumMultiDamage)
+            __result.Add("Repeat", $"{__instance.Repeats} ({__instance.GetTotalDamage(targets, owner)})");
     }
 }
