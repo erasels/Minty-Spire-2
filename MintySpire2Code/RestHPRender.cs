@@ -113,7 +113,7 @@ public static class RestHPRender
         var healedHp = Math.Min(maxHp, currentHp + Math.Max(0, healInt));
 
         extra.Text = $"HP: {currentHp} → {healedHp}";
-        extra.Visible = true;
+        extra.Visible = Config.ShowRestHPRender;
 
         ValidButtons.Register(button);
     }

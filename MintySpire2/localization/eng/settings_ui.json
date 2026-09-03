@@ -9,6 +9,7 @@
   "MINTYSPIRE2-ASC_HOVER_TOOLTIP.title": "Show Ascension effects when hovering the player portrait",
   "MINTYSPIRE2-STICKY_MAP_LEGEND_HIGHLIGHTS.title": "Click map legend icons to toggle persistent highlights",
   "MINTYSPIRE2-ENABLE_JOKES.title": "Show joke changes like Pael's Eye following the cursor",
+  "MINTYSPIRE2-SHOW_REST_HP_RENDER.title": "Show the amount you will heal at a rest site",
   "MINTYSPIRE2-REMINDERS.title": "Reminders",
   "MINTYSPIRE2-CARD_OVERLAY_REMINDERS.title": "Show relic/power reminder icons on cards",
   "MINTYSPIRE2-RELIC_CARD_GLOW.title": "Give cards affected by relics/powers a yellow glow",
