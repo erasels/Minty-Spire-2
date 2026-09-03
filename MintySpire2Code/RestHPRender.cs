@@ -46,6 +46,24 @@ public static class RestHPRender
         CreateLabelIfNotExists(__instance);
         UpdateExtraLabel(__instance);
     }
+    
+    /// <summary>
+    ///     After NRestSiteButton is pressed, immediately hide the text.
+    ///     Remove child instead of just setting visible to false because CatchHPChange revisibles it
+    /// </summary>
+    [HarmonyPatch(typeof(NRestSiteButton), "OnPress")]
+    [HarmonyPostfix]
+    public static void OnPress_Postfix(NRestSiteButton __instance)
+    {
+        if (__instance.Option is not HealRestSiteOption) return;
+
+        var parent = __instance.GetNodeOrNull<Control>("%Visuals") ?? __instance;
+        var label = parent.FindChild(HealLabelNodeName, true, false)  as Label;
+
+        if (label != null)
+            parent.RemoveChild(label);
+    }
+
 
     /// <summary>
     ///     Creates the label and applies layout/styling. Uses %Visuals as the parent when available.
