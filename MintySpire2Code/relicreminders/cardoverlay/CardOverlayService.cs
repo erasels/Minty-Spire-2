@@ -29,7 +29,7 @@ public static class CardOverlayService
         RegisterRelic<TuningFork>((r, c) => c.Type == CardType.Skill && r.Status == RelicStatus.Active);
         RegisterRelic<GalacticDust>(ShouldShowGalacticDust);
         RegisterRelic<ThrowingAxe>((r, _) => r.Status == RelicStatus.Active);
-        RegisterRelic((RainbowRing relic, CardModel card) => card.Type == RainbowRingRemainingTypeRequired(relic));
+        RegisterRelic<RainbowRing>((r, c) => c.Type == RainbowRingRemainingTypeRequired(r));
 
         RegisterPower<EchoFormPower>(ShouldShowEchoForm);
     }
