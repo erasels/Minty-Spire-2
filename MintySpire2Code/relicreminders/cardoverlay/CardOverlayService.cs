@@ -29,6 +29,7 @@ public static class CardOverlayService
         RegisterRelic<TuningFork>((r, c) => c.Type == CardType.Skill && r.Status == RelicStatus.Active);
         RegisterRelic<GalacticDust>(ShouldShowGalacticDust);
         RegisterRelic<ThrowingAxe>((r, _) => r.Status == RelicStatus.Active);
+        RegisterRelic((RainbowRing relic, CardModel card) => card.Type == RainbowRingRemainingTypeRequired(relic));
 
         RegisterPower<EchoFormPower>(ShouldShowEchoForm);
     }
@@ -88,6 +89,24 @@ public static class CardOverlayService
         var threshold = gd.DynamicVars.Stars.IntValue;
         if (threshold <= 0 || card.CurrentStarCost <= 0) return false;
         return (gd.StarsSpent % threshold) + card.CurrentStarCost >= threshold;
+    }
+    
+    private static CardType? RainbowRingRemainingTypeRequired(RainbowRing rr)
+    {
+        if (rr.Status == RelicStatus.Normal) // RelicStatus only turns Active after activation
+        {
+            var attackPlayed = Math.Min(1, rr.AttacksPlayedThisTurn);
+            var skillPlayed = Math.Min(1, rr.SkillsPlayedThisTurn);
+            var powerPlayed = Math.Min(1, rr.PowersPlayedThisTurn);
+
+            if (attackPlayed + skillPlayed + powerPlayed == 2)
+            {
+                if (attackPlayed == 0) return CardType.Attack;
+                if (skillPlayed == 0)  return CardType.Skill;
+                                       return CardType.Power;
+            }
+        }
+        return null;
     }
 
     // Shows while the player still has unspent duplications this turn.
