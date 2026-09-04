@@ -2,6 +2,7 @@
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Commands;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.combat;
 

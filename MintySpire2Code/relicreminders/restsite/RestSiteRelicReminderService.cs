@@ -3,6 +3,7 @@ using System.Reflection;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.restsite;
 

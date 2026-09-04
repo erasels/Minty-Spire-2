@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Nodes.Events;
 using MegaCrit.Sts2.Core.Nodes.Relics;
 using MegaCrit.Sts2.Core.Nodes.Screens.InspectScreens;
 using MegaCrit.Sts2.Core.Nodes.Screens.RelicCollection;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.jokes;
 

@@ -3,6 +3,7 @@ using HarmonyLib;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.RestSite;
 using MegaCrit.Sts2.Core.Nodes.RestSite;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.restsite;
 

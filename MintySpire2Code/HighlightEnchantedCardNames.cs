@@ -4,6 +4,7 @@ using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code;
 /**
@@ -14,8 +15,6 @@ namespace MintySpire2.MintySpire2Code;
 [HarmonyPatch(typeof(NCard), "UpdateTitleLabel")]
 internal static class HighlightEnchantedCardNames
 {
-    private static readonly Color HighlightEnchantsColor = new(Config.HighlightEnchantsColor);
-    private static readonly Color HighlightEnchantsOutlineColor = new(Config.HighlightEnchantsOutlineColor);
     
     [HarmonyPostfix]
     private static void Postfix(NCard __instance, MegaLabel ____titleLabel)
@@ -27,11 +26,11 @@ internal static class HighlightEnchantedCardNames
         // change title color of enchanted cards
         ____titleLabel.AddThemeColorOverride(
             ThemeConstants.Label.FontColor,
-            HighlightEnchantsColor);
+            new Color(Config.HighlightEnchantsColor));
 
         // change title outline color of enchanted cards
         ____titleLabel.AddThemeColorOverride(
             ThemeConstants.Label.FontOutlineColor,
-            HighlightEnchantsOutlineColor);
+            new Color(Config.HighlightEnchantsOutlineColor));
     }
 }

@@ -1,7 +1,7 @@
 ﻿using BaseLib.Config;
 using Godot;
 
-namespace MintySpire2.MintySpire2Code;
+namespace MintySpire2.MintySpire2Code.config;
 
 public partial class Config : SimpleModConfig
 {
@@ -40,7 +40,7 @@ public partial class Config : SimpleModConfig
     {
         MintyInit.Logger.Info("Setting up SimpleModConfig " + GetType().FullName);
         GenerateOptionsForAllProperties(optionContainer);
-        optionContainer.AddChild(new EnchantedCardPreview());
+        optionContainer.AddChild(new config.EnchantedCardPreview());
         AddRestoreDefaultsButton(optionContainer);
         SetupFocusNeighbors(optionContainer);
     }

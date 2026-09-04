@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Nodes.Cards.Holders;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MintySpire2.MintySpire2Code;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.relicreminders.cardoverlay;
 

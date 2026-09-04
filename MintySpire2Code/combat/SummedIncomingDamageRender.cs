@@ -17,6 +17,7 @@ using MegaCrit.Sts2.Core.Runs;
 using MintySpire2.MintySpire2Code.util;
 using System.Reflection;
 using MegaCrit.Sts2.Core.ValueProps;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code.combat;
 

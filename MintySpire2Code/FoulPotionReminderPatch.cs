@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Models.Potions;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Potions;
 using MegaCrit.Sts2.Core.Nodes.Rooms;
+using MintySpire2.MintySpire2Code.config;
 using MintySpire2.MintySpire2Code.util;
 
 namespace MintySpire2.MintySpire2Code;

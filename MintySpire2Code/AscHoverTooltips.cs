@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
 using MegaCrit.sts2.Core.Nodes.TopBar;
 using MegaCrit.Sts2.Core.Runs;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code;
 
