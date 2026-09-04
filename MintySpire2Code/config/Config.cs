@@ -3,7 +3,7 @@ using Godot;
 
 namespace MintySpire2.MintySpire2Code.config;
 
-public partial class Config : SimpleModConfig
+public class Config : SimpleModConfig
 {
     
     [ConfigHideInUI]
