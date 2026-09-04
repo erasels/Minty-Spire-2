@@ -14,7 +14,8 @@ namespace MintySpire2.MintySpire2Code;
 [HarmonyPatch(typeof(NCard), "UpdateTitleLabel")]
 internal static class HighlightEnchantedCardNames
 {
-    private static readonly Color DarkPink = new("6F1F6F");
+    private static readonly Color HighlightEnchantsColor = new(Config.HighlightEnchantsColor);
+    private static readonly Color HighlightEnchantsOutlineColor = new(Config.HighlightEnchantsOutlineColor);
     
     [HarmonyPostfix]
     private static void Postfix(NCard __instance, MegaLabel ____titleLabel)
@@ -26,11 +27,11 @@ internal static class HighlightEnchantedCardNames
         // change title color of enchanted cards
         ____titleLabel.AddThemeColorOverride(
             ThemeConstants.Label.FontColor,
-            StsColors.purple);
+            HighlightEnchantsColor);
 
         // change title outline color of enchanted cards
         ____titleLabel.AddThemeColorOverride(
             ThemeConstants.Label.FontOutlineColor,
-            DarkPink);
+            HighlightEnchantsOutlineColor);
     }
 }
