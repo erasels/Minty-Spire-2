@@ -27,7 +27,7 @@ internal partial class EnchantedCardPreview : Control
     public override void _Ready()
     {
         base._Ready();
-
+        
         _cardNode = NCard.Create(ModelDb.Card<StrikeIronclad>());
         if (_cardNode == null)
             return;
@@ -55,6 +55,7 @@ internal partial class EnchantedCardPreview : Control
 
         if (!Config.HighlightEnchants)
         {
+            // remove empty space when card is not visible
             CustomMinimumSize = Vector2.Zero;
             _lastHighlightEnabled = false;
             return;
@@ -63,6 +64,7 @@ internal partial class EnchantedCardPreview : Control
         var scaledCardSize = NCard.defaultSize * PreviewScale;
         CustomMinimumSize = new Vector2(0f, scaledCardSize.Y + PreviewVerticalPadding);
 
+        // centering the card
         var cardX = Size.X * 0.5f;
         var cardY = PreviewVerticalPadding + scaledCardSize.Y * 0.5f;
         _cardNode.Position = new Vector2(cardX, cardY);
@@ -77,7 +79,7 @@ internal partial class EnchantedCardPreview : Control
         _lastTitleColor = titleColor;
         _lastOutlineColor = outlineColor;
         _lastHighlightEnabled = Config.HighlightEnchants;
-
+        
         _cardNode.UpdateVisuals(PileType.None, CardPreviewMode.Normal);
 
         var titleLabel = _cardNode.GetNodeOrNull<MegaLabel>("%TitleLabel");
