@@ -1,8 +1,9 @@
 using Godot;
-using MegaCrit.Sts2.addons.mega_text;
+using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Cards;
+using MegaCrit.Sts2.Core.Models.Enchantments;
 using MegaCrit.Sts2.Core.Nodes.Cards;
 
 namespace MintySpire2.MintySpire2Code.config;
@@ -13,9 +14,10 @@ internal partial class EnchantedCardPreview : Control
     private const float PreviewVerticalPadding = 20f;
 
     private NCard? _cardNode;
-    private Color _lastTitleColor;
-    private Color _lastOutlineColor;
-    private bool _lastHighlightEnabled;
+    private string _previousColorHex = Config.HighlightEnchantsColor;
+    private string _previousOutlineColorHex =  Config.HighlightEnchantsOutlineColor;
+    private bool _previousHighlightEnabled = Config.HighlightEnchants;
+    private bool _isFirstProcessPass = true;
 
     public EnchantedCardPreview()
     {
@@ -27,8 +29,11 @@ internal partial class EnchantedCardPreview : Control
     public override void _Ready()
     {
         base._Ready();
-        
-        _cardNode = NCard.Create(ModelDb.Card<StrikeIronclad>());
+
+        var previewCard = ModelDb.Card<StrikeIronclad>().ToMutable();
+        CardCmd.Enchant<Sharp>(previewCard, 1m);
+
+        _cardNode = NCard.Create(previewCard);
         if (_cardNode == null)
             return;
 
@@ -37,13 +42,24 @@ internal partial class EnchantedCardPreview : Control
         AddChild(_cardNode);
 
         SetProcess(true);
-        UpdatePreview();
     }
 
     public override void _Process(double delta)
     {
         base._Process(delta);
-        UpdatePreview();
+
+        // Need to update visuals on the first time through so the card displays properly
+        // If we call this in the _Ready() function, the container layout isn't updated yet so Size is zero, and it displays on the left
+        if (_isFirstProcessPass)
+        {
+            _isFirstProcessPass = false;
+            UpdatePreview();
+            return;
+        }
+        
+        // Reapply visuals if something changed
+        if (Config.HighlightEnchantsColor != _previousColorHex || Config.HighlightEnchantsOutlineColor != _previousOutlineColorHex || Config.HighlightEnchants != _previousHighlightEnabled)
+            UpdatePreview();
     }
 
     private void UpdatePreview()
@@ -52,12 +68,12 @@ internal partial class EnchantedCardPreview : Control
             return;
 
         _cardNode.Visible = Config.HighlightEnchants;
-
+        
         if (!Config.HighlightEnchants)
         {
             // remove empty space when card is not visible
             CustomMinimumSize = Vector2.Zero;
-            _lastHighlightEnabled = false;
+            _previousHighlightEnabled = false;
             return;
         }
 
@@ -69,24 +85,10 @@ internal partial class EnchantedCardPreview : Control
         var cardY = PreviewVerticalPadding + scaledCardSize.Y * 0.5f;
         _cardNode.Position = new Vector2(cardX, cardY);
 
-        var titleColor = new Color(Config.HighlightEnchantsColor);
-        var outlineColor = new Color(Config.HighlightEnchantsOutlineColor);
-
-        // Skip reapplying visuals if nothing changed
-        if (titleColor == _lastTitleColor && outlineColor == _lastOutlineColor && Config.HighlightEnchants == _lastHighlightEnabled)
-            return;
-
-        _lastTitleColor = titleColor;
-        _lastOutlineColor = outlineColor;
-        _lastHighlightEnabled = Config.HighlightEnchants;
+        _previousColorHex = Config.HighlightEnchantsColor;
+        _previousOutlineColorHex = Config.HighlightEnchantsOutlineColor;
+        _previousHighlightEnabled = Config.HighlightEnchants;
         
         _cardNode.UpdateVisuals(PileType.None, CardPreviewMode.Normal);
-
-        var titleLabel = _cardNode.GetNodeOrNull<MegaLabel>("%TitleLabel");
-        if (titleLabel == null)
-            return;
-
-        titleLabel.AddThemeColorOverride(ThemeConstants.Label.FontColor, titleColor);
-        titleLabel.AddThemeColorOverride(ThemeConstants.Label.FontOutlineColor, outlineColor);
     }
 }
