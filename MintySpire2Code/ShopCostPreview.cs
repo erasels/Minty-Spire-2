@@ -52,7 +52,7 @@ class ShopCostPreview
             if (previewGold >= 0)
             {
                 CostPreviewLabel.SetTextAutoSize($"↳ {previewGold}");
-                CostPreviewLabel.Visible = true;
+                CostPreviewLabel.Visible = Config.ShowShopCostPreview;
             }
         }
     }

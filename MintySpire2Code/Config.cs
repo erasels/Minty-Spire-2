@@ -21,6 +21,9 @@ public class Config : SimpleModConfig
     public static bool StickyMapLegendHighlights { get; set; } = true;
     public static bool AscHoverTooltip { get; set; } = true;
     public static bool EnableJokes { get; set; } = true;
+    public static bool ShowRestHPRender { get; set; } = true;
+    public static bool ShowSumMultiDamage { get; set; } = true;
+    public static bool ShowShopCostPreview { get; set; } = true;
     
 
     [ConfigSection("reminders")]
