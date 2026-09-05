@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Nodes.Rewards;
 using MegaCrit.Sts2.Core.Nodes.Screens;
 using MegaCrit.Sts2.Core.Rewards;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code;
 

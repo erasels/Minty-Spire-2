@@ -4,6 +4,7 @@ using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Nodes.HoverTips;
+using MintySpire2.MintySpire2Code.config;
 
 namespace MintySpire2.MintySpire2Code;
 
