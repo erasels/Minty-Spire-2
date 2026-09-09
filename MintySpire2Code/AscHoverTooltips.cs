@@ -1,4 +1,5 @@
-﻿using Godot;
+﻿using System.Runtime.CompilerServices;
+using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.HoverTips;
@@ -16,22 +17,27 @@ namespace MintySpire2.MintySpire2Code;
 [HarmonyPatch]
 public static class AscHoverTooltips
 {
-    private static List<IHoverTip> _myTips = [];
+    private static readonly ConditionalWeakTable<NTopBarPortraitTip, List<IHoverTip>> CustomTips = [];
 
     [HarmonyPatch(typeof(NTopBarPortraitTip), nameof(NTopBarPortraitTip.Initialize))]
     public class InitializeTip
     {
         [HarmonyPostfix]
-        public static void Init(IRunState runState, IHoverTip ____hoverTip)
+        public static void Init(NTopBarPortraitTip __instance, IRunState runState, IHoverTip ____hoverTip)
         {
-            _myTips.Add(____hoverTip);
+            if (!__instance.ShowTip)
+                return;
+
+            List<IHoverTip> tips = [____hoverTip];
             for (int i = 1; i <= runState.AscensionLevel; ++i)
             {
-                _myTips.Add(new HoverTip(
+                tips.Add(new HoverTip(
                     AscensionHelper.GetTitle(i),
                     AscensionHelper.GetDescription(i)
                 ));
             }
+
+            CustomTips.AddOrUpdate(__instance, tips);
         }
     }
 
@@ -46,7 +52,13 @@ public static class AscHoverTooltips
 
             if (!__instance.ShowTip)
                 return false;
-            NHoverTipSet.CreateAndShow(__instance, _myTips).GlobalPosition = __instance.GlobalPosition + new Vector2(0, __instance.Size.Y + 20);
+
+            if (!CustomTips.TryGetValue(__instance, out var tips))
+                return true;
+
+            var tipSet = NHoverTipSet.CreateAndShow(__instance, tips);
+            if (tipSet != null)
+                tipSet.GlobalPosition = __instance.GlobalPosition + new Vector2(0, __instance.Size.Y + 20);
 
             return false;
         }
