@@ -26,7 +26,6 @@ public class Config : SimpleModConfig
     public static bool HideCommonKeywordTooltips { get; set; } = false;
     public static bool ChangeRewardOrder { get; set; } = true;
     public static bool StickyMapLegendHighlights { get; set; } = true;
-    public static bool AscHoverTooltip { get; set; } = true;
     public static bool EnableJokes { get; set; } = true;
     public static bool HighlightEnchants { get; set; } = true;
     [ConfigVisibleIf(nameof(HighlightEnchants))]

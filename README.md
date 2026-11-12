@@ -18,7 +18,6 @@ Successor of the StS1 mod with the same name. This is a compilation of small qua
 ### Other
 - Heal preview above the rest button at rest sites
 - Adds a preview of how much gold you will have after a purchase (Ind-E)
-- Show ascenscion effects when hovering the character portrait in the top bar (kiooeht)
 - Reorders combat rewards to:
     - Stop special card rewards like Thieving Hopper from covering the normal card reward when clicked in default order (kiooeht)
     - Put the Bowler Hat relic before the gold reward so you don't autopilot and miss the bonus gold (mangochicken)
