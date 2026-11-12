@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.RestSite;
+using MegaCrit.Sts2.Core.Models.Relics;
 using MegaCrit.Sts2.Core.Nodes.RestSite;
 using MintySpire2.MintySpire2Code.util;
 
@@ -129,6 +130,10 @@ public static class RestHPRender
 
         var healInt = (int)Math.Floor(healAmount);
         var healedHp = Math.Min(maxHp, currentHp + Math.Max(0, healInt));
+
+        // Stone Humidifier heals by giving max hp after rest
+        foreach (var relic in player.Relics.OfType<StoneHumidifier>().Where(r => !r.IsMelted))
+            healedHp += (int)Math.Floor(relic.DynamicVars.MaxHp.BaseValue);
 
         extra.Text = $"HP: {currentHp} → {healedHp}";
         extra.Visible = true;
