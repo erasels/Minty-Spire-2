@@ -130,9 +130,7 @@ public static class StickyMapLegendHighlights
             _ => null
         };
         
-        return iconName is null
-            ? null
-            : $"res://images/atlases/compressed.sprites/map/{iconName}_outline.tres";
+        return iconName is null ? null : NNormalMapPoint.OutlinePath(iconName);
     }
 
     private static NMapScreen? FindMapScreen(Node node)
