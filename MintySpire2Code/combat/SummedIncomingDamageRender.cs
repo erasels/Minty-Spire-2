@@ -234,16 +234,16 @@ public static class SummedIncomingDamageRender
         return Math.Max(0, (int)damage);
     }
     
-    private static int GetModifiedIncomingPowerDamage(Creature creature, PowerModel power, ValueProp props)
+    private static int GetModifiedIncomingPowerDamage(Creature creature, decimal baseDamage, ValueProp props, Creature? dealer)
     {
-        if (creature.CombatState == null) return Math.Max(0, power.Amount);
+        if (creature.CombatState == null) return Math.Max(0, (int)baseDamage);
 
         var damage = CompatHelper.ModifyDamage(
             RunManager.Instance.State,
             creature.CombatState,
             creature,
-            creature,
-            power.Amount,
+            dealer,
+            baseDamage,
             props,
             null,
             null,
@@ -306,14 +306,20 @@ public static class SummedIncomingDamageRender
         var disintegration = creature.GetPower<DisintegrationPower>();
         if (disintegration != null)
         {
-            incomingDamage += GetModifiedIncomingPowerDamage(creature, disintegration, ValueProp.Unpowered);
+            incomingDamage += GetModifiedIncomingPowerDamage(creature, disintegration.Amount, ValueProp.Unpowered, creature);
         }
 
         // Constrict power
         var constrict = creature.GetPower<ConstrictPower>();
         if (constrict != null)
         {
-            incomingDamage += GetModifiedIncomingPowerDamage(creature, constrict, ValueProp.Unpowered);
+            incomingDamage += GetModifiedIncomingPowerDamage(creature, constrict.Amount, ValueProp.Unpowered, creature);
+        }
+
+        if (CompatHelper.GetInsatiableDominionPower(creature) is { } dominion)
+        {
+            var damage = dominion.DynamicVars.Damage;
+            incomingDamage += GetModifiedIncomingPowerDamage(creature, damage.BaseValue, damage.Props, dealer: null);
         }
 
         // End turn self damage cards can be affected by current powers.

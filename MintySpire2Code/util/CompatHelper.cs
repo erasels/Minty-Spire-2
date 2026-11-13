@@ -14,6 +14,11 @@ namespace MintySpire2.MintySpire2Code.util;
 
 internal static class CompatHelper
 {
+    // [COMPAT] For v0.107: Look up the v0.113 Dominion power by ID.
+    private static readonly ModelId InsatiableDominionPowerId = new("POWER", "INSATIABLE_DOMINION_POWER");
+
+    public static PowerModel? GetInsatiableDominionPower(Creature creature) => creature.GetPower(InsatiableDominionPowerId);
+
     // [COMPAT] For v0.107: Check for Blitz only when the run exposes GameMode.
     private static readonly PropertyInfo? GameModeProperty = typeof(IRunState).GetProperty("GameMode");
 
