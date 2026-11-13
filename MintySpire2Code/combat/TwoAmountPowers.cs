@@ -8,6 +8,9 @@ using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Combat.History.Entries;
 using MegaCrit.Sts2.Core.Context;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Modding;
 using MegaCrit.Sts2.Core.Models;
@@ -27,6 +30,21 @@ static class TwoAmountPowers
 {
     private const string SecondAmountLabelName = "MintyAmount2Label";
     private static readonly ConditionalWeakTable<PowerModel, HashSet<NPower>> Displays = new();
+
+    // [COMPAT] For v0.107: ModifyDamageMultiplicative doesn't have the CardPlay parameter
+    private static readonly MethodInfo DamageHook = typeof(AbstractModel).GetMethod("ModifyDamageMultiplicative")!;
+    private static readonly bool TakesCardPlay = DamageHook.GetParameters().Length == 6;
+
+    // [COMPAT] For v0.107: Use the card owner when CardPlay lacks Player
+    private static readonly Func<CardPlay, Player>? PlayedBy = typeof(CardPlay).GetProperty("Player")?.GetMethod?.CreateDelegate<Func<CardPlay, Player>>();
+
+    private static decimal DamageMultiplier(PowerModel power, Creature? target, Creature? dealer)
+    {
+        object?[] args = TakesCardPlay
+            ? [target, 1M, ValueProp.Move, dealer, null, null]
+            : [target, 1M, ValueProp.Move, dealer, null];
+        return (decimal)DamageHook.Invoke(power, args)!;
+    }
 
     private static bool Handles(PowerModel? power) => power != null && power is not IHasSecondAmount && DisplaySecondAmount.ContainsKey(power.GetType());
 
@@ -52,7 +70,7 @@ static class TwoAmountPowers
             {
                 // Displays Vulnerable's % increase if it's not 50%
                 var player = LocalContext.GetMe(RunManager.Instance.State);
-                var mult = power.ModifyDamageMultiplicative(power.Owner, 1M, ValueProp.Move, player?.Creature, null, null);
+                var mult = DamageMultiplier(power, power.Owner, player?.Creature);
                 if (mult != power.DynamicVars[VulnerablePower._damageIncrease].BaseValue)
                 {
                     mult = (mult - 1M) * 100M;
@@ -69,7 +87,7 @@ static class TwoAmountPowers
             {
                 // Displays Weak's % decrease if it's not 25%
                 var player = LocalContext.GetMe(RunManager.Instance.State);
-                var mult = power.ModifyDamageMultiplicative(player?.Creature, 1M, ValueProp.Move, power.Owner, null, null);
+                var mult = DamageMultiplier(power, player?.Creature, power.Owner);
                 if (mult != power.DynamicVars[WeakPower._damageDecrease].BaseValue)
                 {
                     mult = (1M - mult) * 100M;
@@ -102,7 +120,7 @@ static class TwoAmountPowers
                 var usesLeft = power.Amount - CombatManager.Instance.History.Entries.OfType<BlockGainedEntry>()
                     .Count(e =>
                         e.HappenedThisTurn(power.CombatState)
-                        && e.CardPlay != null && e.CardPlay.Player.Creature == power.Owner
+                        && e.CardPlay != null && (PlayedBy?.Invoke(e.CardPlay) ?? e.CardPlay.Card.Owner)?.Creature == power.Owner
                         && e.Props.IsCardOrMonsterMove());
                 return new Amount2Data(amount1: $"{Math.Max(0, usesLeft)}/{power.DisplayAmount}");
             }
@@ -112,7 +130,7 @@ static class TwoAmountPowers
 
     static TwoAmountPowers()
     {
-        // Outbreak was reworked in v0.110.0, still show this for v0.108/9.0
+        // [COMPAT] For v0.108-v0.109: Show the pre-rework Outbreak counter.
         var outbreak = typeof(PowerModel).Assembly.GetType("MegaCrit.Sts2.Core.Models.Powers.OutbreakPower");
         if (outbreak != null && ModManager._gameVersion != null &&
             (ModManager._gameVersion.Minor == 109 || ModManager._gameVersion.Minor == 108))

@@ -18,11 +18,14 @@ namespace MintySpire2.MintySpire2Code;
 [HarmonyPatch(typeof(NDeckViewScreen), nameof(NDeckViewScreen._Ready))]
 class DeckCardRemovalCost
 {
+    // [COMPAT] For v0.107: Check for Blitz only when the run exposes GameMode.
+    private static readonly System.Reflection.PropertyInfo? GameModeProperty = typeof(IRunState).GetProperty("GameMode");
+
     [HarmonyPostfix]
     static void Postfix(NDeckViewScreen __instance, Player ____player)
     {
         var run = ____player.RunState;
-        if (!Config.ShowCardRemovalCost || run.GameMode == GameMode.Blitz)
+        if (!Config.ShowCardRemovalCost || GameModeProperty?.GetValue(run)?.ToString() == "Blitz")
             return;
 
         var entry = new MerchantCardRemovalEntry(____player);

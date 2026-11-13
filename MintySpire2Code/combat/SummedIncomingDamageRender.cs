@@ -1,4 +1,4 @@
-﻿using Godot;
+using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.addons.mega_text;
 using MegaCrit.Sts2.Core.Combat;
@@ -253,6 +253,7 @@ public static class SummedIncomingDamageRender
         return Math.Max(0, (int)damage);
     }
 
+    // [COMPAT] For v0.107: Hook.ModifyDamage doesn't have the CardPlay parameter
     private static readonly MethodInfo ModifyDamageMethod = AccessTools.GetDeclaredMethods(typeof(Hook))
         .Single(method => method.Name == nameof(Hook.ModifyDamage)
                           && method.GetParameters() is { Length: 10 or 11 } parameters

@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -141,6 +141,7 @@ public class MintyHooks
     [HarmonyPatch]
     public static class AfterSideTurnEndHook
     {
+        // [COMPAT] For v0.107: AfterSideTurnEnd was named AfterTurnEnd.
         public static MethodBase TargetMethod()
         {
             return AccessTools.Method(typeof(Hook), "AfterSideTurnEnd")

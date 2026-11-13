@@ -1,4 +1,4 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -23,6 +23,7 @@ static class HistoryCourseTooltip
     private static bool IsAppropriateCard(RelicModel relic, CardPlay cardPlay)
     {
         bool isThisPlayer = cardPlay.Card.Owner == relic.Owner;
+        // [COMPAT] For v0.107-v0.108: History Course also replays skills.
         bool isAttackOrSkill = cardPlay.Card.Type is CardType.Attack or CardType.Skill;
         if (ModManager._gameVersion != null && ModManager._gameVersion.Minor >= 109)
         {
