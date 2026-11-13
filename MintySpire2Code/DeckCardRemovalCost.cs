@@ -7,8 +7,8 @@ using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Nodes.Screens;
 using MegaCrit.Sts2.Core.Rooms;
-using MegaCrit.Sts2.Core.Runs;
 using MintySpire2.MintySpire2Code.config;
+using MintySpire2.MintySpire2Code.util;
 
 namespace MintySpire2.MintySpire2Code;
 
@@ -18,14 +18,11 @@ namespace MintySpire2.MintySpire2Code;
 [HarmonyPatch(typeof(NDeckViewScreen), nameof(NDeckViewScreen._Ready))]
 class DeckCardRemovalCost
 {
-    // [COMPAT] For v0.107: Check for Blitz only when the run exposes GameMode.
-    private static readonly System.Reflection.PropertyInfo? GameModeProperty = typeof(IRunState).GetProperty("GameMode");
-
     [HarmonyPostfix]
     static void Postfix(NDeckViewScreen __instance, Player ____player)
     {
         var run = ____player.RunState;
-        if (!Config.ShowCardRemovalCost || GameModeProperty?.GetValue(run)?.ToString() == "Blitz")
+        if (!Config.ShowCardRemovalCost || Wiz.IsBlitzMode(run))
             return;
 
         var entry = new MerchantCardRemovalEntry(____player);

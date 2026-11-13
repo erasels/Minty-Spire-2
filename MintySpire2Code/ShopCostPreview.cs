@@ -5,6 +5,7 @@ using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Helpers;
 using MegaCrit.Sts2.Core.Nodes;
 using MegaCrit.Sts2.Core.Nodes.Screens.Shops;
+using MintySpire2.MintySpire2Code.util;
 
 namespace MintySpire2.MintySpire2Code;
 
@@ -42,11 +43,11 @@ class ShopCostPreview
     {
         static void Prefix(NMerchantSlot __instance)
         {
+            if (__instance.Player is not Player player || Wiz.IsBlitzMode(player.RunState))
+                return;
+
             if (!initDone || !GodotObject.IsInstanceValid(CostPreviewLabel))
                 init();
-
-            if (__instance.Player is not Player player)
-                return;
 
             var previewGold = player.Gold - __instance.Entry.Cost;
             if (previewGold >= 0)
@@ -60,6 +61,11 @@ class ShopCostPreview
     [HarmonyPatch(typeof(NMerchantSlot), "OnUnfocus")]
     class OnUnfocusPatch
     {
-        static void Prefix(NMerchantSlot __instance) => CostPreviewLabel.Visible = false;
+        [HarmonyPrefix]
+        static void HideOnUnfocus()
+        {
+            if (initDone && GodotObject.IsInstanceValid(CostPreviewLabel))
+                CostPreviewLabel.Visible = false;
+        }
     }
 }
