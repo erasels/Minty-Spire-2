@@ -25,6 +25,7 @@ public class Config : SimpleModConfig
     [ConfigSection("misc")]
     public static bool HideCommonKeywordTooltips { get; set; } = false;
     public static bool ChangeRewardOrder { get; set; } = true;
+    public static bool ShowCardRemovalCost { get; set; } = true;
     public static bool StickyMapLegendHighlights { get; set; } = true;
     public static bool EnableJokes { get; set; } = true;
     public static bool HighlightEnchants { get; set; } = true;
