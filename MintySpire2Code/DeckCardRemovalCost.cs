@@ -22,7 +22,7 @@ class DeckCardRemovalCost
     static void Postfix(NDeckViewScreen __instance, Player ____player)
     {
         var run = ____player.RunState;
-        if (!Config.ShowCardRemovalCost || Wiz.IsBlitzMode(run))
+        if (!Config.ShowCardRemovalCost || CompatHelper.IsBlitzMode(run))
             return;
 
         var entry = new MerchantCardRemovalEntry(____player);

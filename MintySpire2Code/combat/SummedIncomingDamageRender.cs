@@ -219,7 +219,7 @@ public static class SummedIncomingDamageRender
         if (creature.CombatState == null)
             return damageVar.IntValue;
 
-        var damage = ModifyDamageCompat(
+        var damage = CompatHelper.ModifyDamage(
             player.RunState,
             creature.CombatState,
             creature,
@@ -238,7 +238,7 @@ public static class SummedIncomingDamageRender
     {
         if (creature.CombatState == null) return Math.Max(0, power.Amount);
 
-        var damage = ModifyDamageCompat(
+        var damage = CompatHelper.ModifyDamage(
             RunManager.Instance.State,
             creature.CombatState,
             creature,
@@ -252,39 +252,6 @@ public static class SummedIncomingDamageRender
 
         return Math.Max(0, (int)damage);
     }
-
-    // [COMPAT] For v0.107: Hook.ModifyDamage doesn't have the CardPlay parameter
-    private static readonly MethodInfo ModifyDamageMethod = AccessTools.GetDeclaredMethods(typeof(Hook))
-        .Single(method => method.Name == nameof(Hook.ModifyDamage)
-                          && method.GetParameters() is { Length: 10 or 11 } parameters
-                          && parameters[^1].IsOut);
-
-    private static decimal ModifyDamageCompat(
-        IRunState runState,
-        object combatState,
-        Creature? target,
-        Creature? dealer,
-        decimal damage,
-        ValueProp props,
-        CardModel? cardSource,
-        CardPlay? cardPlay,
-        ModifyDamageHookType modifyDamageHookType,
-        CardPreviewMode previewMode)
-    {
-        var parameters = ModifyDamageMethod.GetParameters();
-        var args = parameters.Length == 11
-            ? new object?[]
-            {
-                runState, combatState, target, dealer, damage, props, cardSource, cardPlay, modifyDamageHookType, previewMode, null
-            }
-            : new object?[]
-            {
-                runState, combatState, target, dealer, damage, props, cardSource, modifyDamageHookType, previewMode, null
-            };
-
-        return (decimal)ModifyDamageMethod.Invoke(null, args)!;
-    }
-
 
     /// <summary>
     ///     Refresh labels if the hand changes in case end turn damage cards are added

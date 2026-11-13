@@ -141,13 +141,7 @@ public class MintyHooks
     [HarmonyPatch]
     public static class AfterSideTurnEndHook
     {
-        // [COMPAT] For v0.107: AfterSideTurnEnd was named AfterTurnEnd.
-        public static MethodBase TargetMethod()
-        {
-            return AccessTools.Method(typeof(Hook), "AfterSideTurnEnd")
-                   ?? AccessTools.Method(typeof(Hook), "AfterTurnEnd")
-                   ?? throw new MissingMethodException(typeof(Hook).FullName, "AfterSideTurnEnd/AfterTurnEnd");
-        }
+        public static MethodBase TargetMethod() => CompatHelper.GetAfterSideTurnEndMethod();
 
         [HarmonyPostfix]
         public static void Postfix(CombatSide side, ref Task __result)

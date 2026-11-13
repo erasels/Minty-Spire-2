@@ -43,7 +43,7 @@ class ShopCostPreview
     {
         static void Prefix(NMerchantSlot __instance)
         {
-            if (__instance.Player is not Player player || Wiz.IsBlitzMode(player.RunState))
+            if (__instance.Player is not Player player || CompatHelper.IsBlitzMode(player.RunState))
                 return;
 
             if (!initDone || !GodotObject.IsInstanceValid(CostPreviewLabel))

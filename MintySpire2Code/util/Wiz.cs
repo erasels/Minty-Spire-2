@@ -9,11 +9,6 @@ namespace MintySpire2.MintySpire2Code.util;
 
 public class Wiz
 {
-    // [COMPAT] For v0.107: Check for Blitz only when the run exposes GameMode.
-    private static readonly System.Reflection.PropertyInfo? GameModeProperty = typeof(IRunState).GetProperty("GameMode");
-
-    public static bool IsBlitzMode(IRunState run) => GameModeProperty?.GetValue(run)?.ToString() == "Blitz";
-
     public static Player? p()
     {
         return LocalContext.GetMe(RunManager.Instance?.State);
