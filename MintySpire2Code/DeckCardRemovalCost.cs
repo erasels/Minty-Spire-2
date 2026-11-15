@@ -41,7 +41,7 @@ class DeckCardRemovalCost
             AnchorRight = upgrades.AnchorLeft,
             AnchorTop = upgrades.AnchorTop,
             AnchorBottom = upgrades.AnchorTop,
-            OffsetLeft = upgrades.OffsetLeft,
+            OffsetLeft = upgrades.OffsetLeft + 12, // Account for the hitbox being larger than the box texture
             OffsetRight = upgrades.OffsetLeft,
             OffsetTop = upgrades.OffsetTop - 36,
             OffsetBottom = upgrades.OffsetTop,
