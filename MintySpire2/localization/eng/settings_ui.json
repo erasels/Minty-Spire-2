@@ -3,7 +3,8 @@
   "MINTYSPIRE2-COMBAT.title": "Combat",
   "MINTYSPIRE2-SHUFFLE_SPEED.title": "Discard to draw shuffle speed",
   "MINTYSPIRE2-SHOW_INCOMING_DAMAGE.title": "Display incoming damage next to HP bar",
-  "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "Size of incoming damage text (Default: 14)",
+  "MINTYSPIRE2-SHOW_INCOMING_DAMAGE_TOOLTIP.title": "\t Show incoming damage breakdown on hover",
+  "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "\t Size of incoming damage text (Default: 14)",
   "MINTYSPIRE2-MISC.title": "Miscellaneous",
   "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "Reorder specific combat rewards",
   "MINTYSPIRE2-SHOW_CARD_REMOVAL_COST.title": "Show shop card removal cost in the deck view",
@@ -11,11 +12,11 @@
   "MINTYSPIRE2-ENABLE_JOKES.title": "Show joke changes like Pael's Eye following the cursor",
   "MINTYSPIRE2-REMINDERS.title": "Reminders",
   "MINTYSPIRE2-CARD_OVERLAY_REMINDERS.title": "Show relic/power reminder icons on cards",
-  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "Give cards affected by relics/powers a yellow glow",
+  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "\t Give cards affected by relics/powers a yellow glow",
   "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "Show relic reminders under the End Turn button",
   "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "Show out-of-combat reminders (e.g. Foul Potion in shops)",
   "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "Hide common keyword tooltips",
   "MINTYSPIRE2-HIGHLIGHT_ENCHANTS.title": "Highlight the name of enchanted cards",
-  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_COLOR.title": "Text color",
-  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_OUTLINE_COLOR.title": "Outline color"
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_COLOR.title": "\t Text color",
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_OUTLINE_COLOR.title": "\t Outline color"
 }

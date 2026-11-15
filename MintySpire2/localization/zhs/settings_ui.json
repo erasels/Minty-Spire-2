@@ -3,7 +3,8 @@
   "MINTYSPIRE2-COMBAT.title": "战斗",
   "MINTYSPIRE2-SHUFFLE_SPEED.title": "弃牌后抽牌的洗牌速度",
   "MINTYSPIRE2-SHOW_INCOMING_DAMAGE.title": "在生命值栏旁显示即将受到的伤害",
-  "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "即将受到的伤害文本大小",
+  "MINTYSPIRE2-SHOW_INCOMING_DAMAGE_TOOLTIP.title": "\t 悬停时显示即将受到的伤害明细",
+  "MINTYSPIRE2-INCOMING_DAMAGE_SIZE.title": "\t 即将受到的伤害文本大小",
   "MINTYSPIRE2-MISC.title": "杂项",
   "MINTYSPIRE2-CHANGE_REWARD_ORDER.title": "调整特定战斗奖励的顺序",
   "MINTYSPIRE2-SHOW_CARD_REMOVAL_COST.title": "在牌组界面显示商店的卡牌移除费用",
@@ -11,11 +12,11 @@
   "MINTYSPIRE2-ENABLE_JOKES.title": "显示玩笑改动，例如佩尔之眼跟随光标",
   "MINTYSPIRE2-REMINDERS.title": "提醒",
   "MINTYSPIRE2-CARD_OVERLAY_REMINDERS.title": "在卡牌上显示遗物/能力提醒图标",
-  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "使受遗物/能力影响的卡牌呈黄色发光效果",
+  "MINTYSPIRE2-RELIC_CARD_GLOW.title": "\t 使受遗物/能力影响的卡牌呈黄色发光效果",
   "MINTYSPIRE2-END_TURN_BUTTON_REMINDERS.title": "在结束回合按钮上显示遗物提醒",
   "MINTYSPIRE2-OUT_OF_COMBAT_REMINDERS.title": "显示非战斗提醒（如商店中的浊液药水）",
   "MINTYSPIRE2-HIDE_COMMON_KEYWORD_TOOLTIPS.title": "隐藏常见关键词的提示",
   "MINTYSPIRE2-HIGHLIGHT_ENCHANTS.title": "高亮显示被附魔卡牌的名称",
-  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_COLOR.title": "T文本颜色",
-  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_OUTLINE_COLOR.title": "描边颜色"
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_COLOR.title": "\t T文本颜色",
+  "MINTYSPIRE2-HIGHLIGHT_ENCHANTS_OUTLINE_COLOR.title": "\t 描边颜色"
 }

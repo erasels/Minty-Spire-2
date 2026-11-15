@@ -15,7 +15,7 @@ using MegaCrit.Sts2.Core.MonsterMoves.Intents;
 using MegaCrit.Sts2.Core.Nodes.Combat;
 using MegaCrit.Sts2.Core.Runs;
 using MintySpire2.MintySpire2Code.util;
-using System.Reflection;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.ValueProps;
 using MintySpire2.MintySpire2Code.config;
 
@@ -85,7 +85,7 @@ public static class SummedIncomingDamageRender
 
         var container = bar.HpBarContainer;
 
-        var label = new MegaLabel
+        var label = new IncomingDamageLabel
         {
             Name = RightTextNodeName,
             Text = "",
@@ -122,7 +122,7 @@ public static class SummedIncomingDamageRender
         var font = label.GetThemeFont("font");
 
         // Use the font's real line height instead of the HP bar height.
-        var labelWidth = 20f;
+        var labelWidth = Math.Max(20f, font.GetStringSize(label.Text, fontSize: fontSize).X);
         var labelHeight = font?.GetHeight(fontSize) ?? fontSize;
 
         label.Size = new Vector2(labelWidth, labelHeight);
@@ -140,8 +140,7 @@ public static class SummedIncomingDamageRender
     /// </summary>
     private static void RefreshVisibilityAndText(NHealthBar bar)
     {
-        var label = bar.GetNode(RightTextNodeName) as Label;
-        if (label == null)
+        if (bar.GetNode(RightTextNodeName) is not IncomingDamageLabel label)
             return;
 
         if (!Config.ShowIncomingDamage || CombatManager.Instance.IsEnemyTurnStarted)
@@ -158,10 +157,14 @@ public static class SummedIncomingDamageRender
             return;
         }
 
-        var incomingDamage = CalculateIncomingDamage(creature);
+        var breakdown = new Dictionary<string, int>();
+        var incomingDamage = CalculateIncomingDamage(creature, breakdown);
+        label.Breakdown = string.Join("\n", breakdown.Select(entry => $"+ [blue]{entry.Value}[/blue] {entry.Key}"));
         if (incomingDamage > 0)
         {
             label.Text = $"←{incomingDamage}";
+            label.AddThemeFontSizeOverride("font_size", Config.IncomingDamageSize);
+            RepositionLabel(bar, bar.HpBarContainer.Size);
             label.Visible = true;
             return;
         }
@@ -179,19 +182,7 @@ public static class SummedIncomingDamageRender
         ValidBars.ForEachLive(RefreshVisibilityAndText);
     }
 
-    private static int incomingCardDamage = 0;
-
-    private static void RefreshIncomingCardDamage(Player player)
-    {
-        var newInc = GetIncomingCardDamage(player);
-        if (newInc == incomingCardDamage)
-            return;
-
-        incomingCardDamage = newInc;
-        ValidBars.ForEachLive(RefreshVisibilityAndText);
-    }
-
-    private static int GetIncomingCardDamage(Player player)
+    private static int GetIncomingCardDamage(Player player, Dictionary<string, int> breakdown)
     {
         if (!Config.ShowIncomingDamage) return 0;
 
@@ -207,7 +198,9 @@ public static class SummedIncomingDamageRender
                 continue;
 
             // Ignoring HP loss cards here
-            totalDamage += card.DynamicVars.Values.OfType<DamageVar>().Sum(cvar => GetModifiedIncomingCardDamage(player, card, cvar));
+            var damage = card.DynamicVars.Values.OfType<DamageVar>().Sum(cvar => GetModifiedIncomingCardDamage(player, card, cvar));
+            totalDamage += damage;
+            AddDamage(breakdown, card.Title, damage);
         }
 
         return totalDamage;
@@ -267,7 +260,7 @@ public static class SummedIncomingDamageRender
             var player = LocalContext.GetMe(RunManager.Instance.State);
             if (player?.PlayerCombatState == null) return;
 
-            RefreshIncomingCardDamage(player);
+            ValidBars.ForEachLive(RefreshVisibilityAndText);
         }
     }
 
@@ -280,14 +273,14 @@ public static class SummedIncomingDamageRender
         var player = LocalContext.GetMe(RunManager.Instance.State);
         if (player?.PlayerCombatState == null || __instance.Owner != player) return;
 
-        RefreshIncomingCardDamage(player);
+        ValidBars.ForEachLive(RefreshVisibilityAndText);
     }
 
     /// <summary>
     ///     Calculate the incoming damage from common sources such as monsters and powers.
     /// </summary>
     /// <param name="creature">The Player creature that we'll calculate the incoming damage for.</param>
-    private static int CalculateIncomingDamage(Creature creature)
+    private static int CalculateIncomingDamage(Creature creature, Dictionary<string, int> breakdown)
     {
         if (creature.CombatState == null) return 0;
 
@@ -302,30 +295,43 @@ public static class SummedIncomingDamageRender
             }
         }
 
+        AddDamage(breakdown, new LocString("gameplay_ui", "MINTYSPIRE2.incomingDamage.monsters").GetFormattedText(), incomingDamage);
+
         // Knowledge demon end of turn damage
         var disintegration = creature.GetPower<DisintegrationPower>();
         if (disintegration != null)
         {
-            incomingDamage += GetModifiedIncomingPowerDamage(creature, disintegration.Amount, ValueProp.Unpowered, creature);
+            var powerDamage = GetModifiedIncomingPowerDamage(creature, disintegration.Amount, ValueProp.Unpowered, creature);
+            incomingDamage += powerDamage;
+            AddDamage(breakdown, disintegration.Title.GetFormattedText(), powerDamage);
         }
 
         // Constrict power
         var constrict = creature.GetPower<ConstrictPower>();
         if (constrict != null)
         {
-            incomingDamage += GetModifiedIncomingPowerDamage(creature, constrict.Amount, ValueProp.Unpowered, creature);
+            var powerDamage = GetModifiedIncomingPowerDamage(creature, constrict.Amount, ValueProp.Unpowered, creature);
+            incomingDamage += powerDamage;
+            AddDamage(breakdown, constrict.Title.GetFormattedText(), powerDamage);
         }
 
         if (CompatHelper.GetInsatiableDominionPower(creature) is { } dominion)
         {
             var damage = dominion.DynamicVars.Damage;
-            incomingDamage += GetModifiedIncomingPowerDamage(creature, damage.BaseValue, damage.Props, dealer: null);
+            var powerDamage = GetModifiedIncomingPowerDamage(creature, damage.BaseValue, damage.Props, dealer: null);
+            incomingDamage += powerDamage;
+            AddDamage(breakdown, dominion.Title.GetFormattedText(), powerDamage);
         }
 
         // End turn self damage cards can be affected by current powers.
         if (creature.Player != null)
-            incomingDamage += GetIncomingCardDamage(creature.Player);
+            incomingDamage += GetIncomingCardDamage(creature.Player, breakdown);
 
         return incomingDamage;
+    }
+    private static void AddDamage(Dictionary<string, int> breakdown, string name, int damage)
+    {
+        if (damage > 0)
+            breakdown[name] = breakdown.GetValueOrDefault(name) + damage;
     }
 }

@@ -12,6 +12,9 @@ public class Config : SimpleModConfig
     
     [ConfigSection("combat")]
     public static bool ShowIncomingDamage { get; set; } = true;
+    [ConfigVisibleIf(nameof(ShowIncomingDamage), true)]
+    public static bool ShowIncomingDamageTooltip { get; set; } = true;
+    [ConfigVisibleIf(nameof(ShowIncomingDamage), true)]
     [ConfigSlider(8, 30)]
     public static int IncomingDamageSize { get; set; } = 14;
     
