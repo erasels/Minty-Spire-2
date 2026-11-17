@@ -212,7 +212,7 @@ public static class SummedIncomingDamageRender
         if (creature.CombatState == null)
             return damageVar.IntValue;
 
-        var damage = CompatHelper.ModifyDamage(
+        var damage = Hook.ModifyDamage(
             player.RunState,
             creature.CombatState,
             creature,
@@ -222,7 +222,8 @@ public static class SummedIncomingDamageRender
             card,
             null,
             ModifyDamageHookType.All,
-            CardPreviewMode.None);
+            CardPreviewMode.None,
+            out _);
 
         return Math.Max(0, (int)damage);
     }
@@ -231,7 +232,7 @@ public static class SummedIncomingDamageRender
     {
         if (creature.CombatState == null) return Math.Max(0, (int)baseDamage);
 
-        var damage = CompatHelper.ModifyDamage(
+        var damage = Hook.ModifyDamage(
             RunManager.Instance.State,
             creature.CombatState,
             creature,
@@ -241,7 +242,8 @@ public static class SummedIncomingDamageRender
             null,
             null,
             ModifyDamageHookType.All,
-            CardPreviewMode.None);
+            CardPreviewMode.None,
+            out _);
 
         return Math.Max(0, (int)damage);
     }
@@ -280,6 +282,7 @@ public static class SummedIncomingDamageRender
     ///     Calculate the incoming damage from common sources such as monsters and powers.
     /// </summary>
     /// <param name="creature">The Player creature that we'll calculate the incoming damage for.</param>
+    /// <param name="breakdown">Dictionary in which incoming damage and source name is kept track of.</param>
     private static int CalculateIncomingDamage(Creature creature, Dictionary<string, int> breakdown)
     {
         if (creature.CombatState == null) return 0;

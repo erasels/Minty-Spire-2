@@ -5,7 +5,6 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Hooks;
 using MegaCrit.Sts2.Core.Models.Relics;
-using System.Reflection;
 using MintySpire2.MintySpire2Code.relicreminders;
 using MintySpire2.MintySpire2Code.relicreminders.cardoverlay;
 using MintySpire2.MintySpire2Code.relicreminders.endturnbutton;
@@ -138,11 +137,9 @@ public class MintyHooks
         }
     }
 
-    [HarmonyPatch]
+    [HarmonyPatch(typeof(Hook), nameof(Hook.AfterSideTurnEnd))]
     public static class AfterSideTurnEndHook
     {
-        public static MethodBase TargetMethod() => CompatHelper.GetAfterSideTurnEndMethod();
-
         [HarmonyPostfix]
         public static void Postfix(CombatSide side, ref Task __result)
         {

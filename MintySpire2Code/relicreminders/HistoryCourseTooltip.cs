@@ -3,7 +3,6 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.HoverTips;
-using MintySpire2.MintySpire2Code.util;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Relics;
 
@@ -22,9 +21,9 @@ static class HistoryCourseTooltip
      */
     private static bool IsAppropriateCard(RelicModel relic, CardPlay cardPlay)
     {
-        bool isThisPlayer = cardPlay.Card.Owner == relic.Owner;
+        bool isThisPlayer = cardPlay.Player == relic.Owner;
         bool isDupe = cardPlay.Card.IsDupe;
-        return isThisPlayer && CompatHelper.HistoryCourseReplays(cardPlay.Card.Type) && !isDupe;
+        return isThisPlayer && cardPlay.Card.Type == CardType.Attack && !isDupe;
     }
     
     [HarmonyPatch(typeof(RelicModel), "ExtraHoverTips", MethodType.Getter)]

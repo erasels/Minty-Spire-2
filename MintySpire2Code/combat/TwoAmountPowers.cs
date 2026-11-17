@@ -54,7 +54,7 @@ static class TwoAmountPowers
             {
                 // Displays Vulnerable's % increase if it's not 50%
                 var player = LocalContext.GetMe(RunManager.Instance.State);
-                var mult = CompatHelper.DamageMultiplier(power, power.Owner, player?.Creature);
+                var mult = power.ModifyDamageMultiplicative(power.Owner, 1M, ValueProp.Move, player?.Creature, null, null);
                 if (mult != power.DynamicVars[VulnerablePower._damageIncrease].BaseValue)
                 {
                     mult = (mult - 1M) * 100M;
@@ -71,7 +71,7 @@ static class TwoAmountPowers
             {
                 // Displays Weak's % decrease if it's not 25%
                 var player = LocalContext.GetMe(RunManager.Instance.State);
-                var mult = CompatHelper.DamageMultiplier(power, player?.Creature, power.Owner);
+                var mult = power.ModifyDamageMultiplicative(player?.Creature, 1M, ValueProp.Move, power.Owner, null, null);
                 if (mult != power.DynamicVars[WeakPower._damageDecrease].BaseValue)
                 {
                     mult = (1M - mult) * 100M;
@@ -104,21 +104,13 @@ static class TwoAmountPowers
                 var usesLeft = power.Amount - CombatManager.Instance.History.Entries.OfType<BlockGainedEntry>()
                     .Count(e =>
                         e.HappenedThisTurn(power.CombatState)
-                        && e.CardPlay != null && CompatHelper.GetPlayer(e.CardPlay)?.Creature == power.Owner
+                        && e.CardPlay != null && e.CardPlay.Player.Creature == power.Owner
                         && e.Props.IsCardOrMonsterMove());
                 return new Amount2Data(amount1: $"{Math.Max(0, usesLeft)}/{power.DisplayAmount}");
             }
         },
         { typeof(FeralPower), power => new Amount2Data(amount1: $"{power.DisplayAmount}/{power.Amount}") },
     };
-
-    static TwoAmountPowers()
-    {
-        if (CompatHelper.GetLegacyOutbreakType() is Type outbreak)
-        {
-            DisplaySecondAmount[outbreak] = power => power.Amount;
-        }
-    }
 
     private class Amount2Data(string? amount2 = null, string? amount1 = null, Color? color2 = null)
     {
